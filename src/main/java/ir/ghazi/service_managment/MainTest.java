@@ -23,6 +23,7 @@ public class MainTest {
     public void runTest() {
 //        adminSignIn();
 //        clientSignUp();
+//        clientSignIn();
     }
 
     private void adminSignIn() {
@@ -34,11 +35,14 @@ public class MainTest {
     }
     private void clientSignUp() {
         Client client = Client.builder()
-                .firstName("reza")
-                .lastName("amoii")
-                .email("reza@gmail.com")
+                .firstName("mohammadreza")
+                .lastName("ghazi")
+                .email("mohammadreza@gmail.com")
                 .password("Aa@12345")
                 .build();
         clientService.saveClient(client);
+    }
+    private void clientSignIn(){
+        clientService.clientSignIn("reza@gmail.com" , "Aa@12345");
     }
 }
