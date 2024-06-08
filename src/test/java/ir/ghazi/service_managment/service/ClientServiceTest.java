@@ -1,6 +1,7 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.model.Client;
+import ir.ghazi.service_managment.repository.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,8 @@ class ClientServiceTest {
 
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Test
     @DisplayName("Check Save Ok")
@@ -29,7 +32,14 @@ class ClientServiceTest {
                 .email("ali@gmail.com")
                 .password("Aa@12345")
                 .build();
-        clientService.saveClient(client);
+        Client clientSaved = clientService.saveClient(client);
+
+        Optional<Client> byEmailByEmail = clientRepository.findByEmail(clientSaved.getEmail());
+        assertNotNull(byEmailByEmail);
+        assertEquals("mohammadreza", byEmailByEmail.get().getFirstName());
+        assertEquals("ghazi", byEmailByEmail.get().getLastName());
+        assertEquals("ali@gmail.com", byEmailByEmail.get().getEmail());
+        assertEquals("Aa@12345", byEmailByEmail.get().getPassword());
     }
     @Test
     @DisplayName("Check Validation name")
