@@ -4,8 +4,6 @@ import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.model.Admin;
 import ir.ghazi.service_managment.repository.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,7 +21,7 @@ public class AdminService {
         try {
             Optional<Admin> find = adminRepository.findByEmailAndPassword(email, password);
             find.orElseThrow(() -> new NotFoundException("Entity not found"));
-            System.out.println("Welcome " + find.get().getFirstName());
+            log.info("Welcome " + find.get().getFirstName());
             return find;
         }
         catch (Exception e){
