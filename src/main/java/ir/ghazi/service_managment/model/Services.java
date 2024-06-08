@@ -18,7 +18,7 @@ import java.util.List;
 @ToString
 
 @Entity(name = "service")
-public class Service extends BaseEntity<Long> {
+public class Services extends BaseEntity<Long> {
     @Column(name = "service_name" , nullable = false)
     private String name;
 
