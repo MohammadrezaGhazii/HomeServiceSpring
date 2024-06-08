@@ -29,7 +29,6 @@ public class Person extends BaseEntity<Long> {
     private String email;
 
     @Column(name = "phone_number", nullable = false)
-
     private String phoneNumber;
 
     @Column(nullable = false)
