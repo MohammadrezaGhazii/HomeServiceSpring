@@ -28,7 +28,6 @@ class AdminServiceTest {
                 .lastName("ghazi")
                 .email("mohammad@gmail.com")
                 .password("Aa@12345")
-                .phoneNumber("09904040311")
                 .build();
         adminRepository.save(admin);
     }
