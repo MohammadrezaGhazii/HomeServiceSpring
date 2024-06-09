@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.base.exception.IllegalArgumentException;
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.repository.ClientRepository;
@@ -19,19 +20,26 @@ public class ClientService {
     }
 
     public Client saveClient(Client client) {
-        if (!Validation.isNameValid(client.getFirstName()) &&
-                Validation.isNameValid(client.getLastName())) {
-            System.out.println("Firstname and last name should be words only !!!");
-        } else if (!Validation.isEmailValid(client.getEmail())) {
-            System.out.println("Email is not valid ! || Enter like this : johnsons@gmail.com");
-        } else if (!Validation.isPasswordValid(client.getPassword())) {
-            System.out.println("password is not strong ! || Enter like : Aa@12345");
-        } else if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
-            System.out.println("This " + client.getEmail() + " is already registered !!!");
-            System.out.println("Try another email");
-        } else
-            clientRepository.save(client);
-        return client;
+        try {
+            if (!Validation.isNameValid(client.getFirstName())) {
+                log.warn("Firstname should just in letters");
+            } else if (!Validation.isNameValid(client.getLastName())) {
+                log.warn("Lastname should just in letters");
+            } else if (!Validation.isEmailValid(client.getEmail())) {
+                log.warn("Email is not valid ! || Enter like this : johnsons@gmail.com");
+            } else if (!Validation.isPasswordValid(client.getPassword())) {
+                log.warn("password is not strong ! || Enter like : Aa@12345");
+            } else if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
+                log.warn("This " + client.getEmail() + " is already registered !!!");
+            } else {
+                clientRepository.save(client);
+                log.info(client.getEmail() + " has successfully add !");
+            }
+            return client;
+        } catch (Exception e) {
+            log.error("An error in Client sign up ");
+            return null;
+        }
     }
 
     public Optional<Client> clientSignIn(String email, String password) {
@@ -41,7 +49,7 @@ public class ClientService {
             log.info("Welcome " + find.get().getFirstName());
             return find;
         } catch (Exception e) {
-            log.error("An error in Admin sign in ");
+            log.error("An error in Client sign in ");
             return Optional.empty();
         }
     }
