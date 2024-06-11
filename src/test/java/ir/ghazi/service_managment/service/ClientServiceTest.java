@@ -26,7 +26,7 @@ class ClientServiceTest {
         Client client = Client.builder()
                 .firstName("mohammadreza")
                 .lastName("ghazi")
-                .email("testSava2@gmail.com")
+                .email("mohammadreza@gmail.com")
                 .password("Aa@12345")
                 .build();
         Client clientSaved = clientService.saveClient(client);
@@ -35,7 +35,7 @@ class ClientServiceTest {
         assertNotNull(byEmail);
         assertEquals("mohammadreza", byEmail.get().getFirstName());
         assertEquals("ghazi", byEmail.get().getLastName());
-        assertEquals("testSava2@gmail.com", byEmail.get().getEmail());
+        assertEquals("mohammadreza@gmail.com", byEmail.get().getEmail());
         assertEquals("Aa@12345", byEmail.get().getPassword());
     }
 
@@ -45,6 +45,22 @@ class ClientServiceTest {
         Client client = Client.builder()
                 .firstName("123")
                 .lastName("ahmadi")
+                .email("123@gmail.com")
+                .password("Aa@12345")
+                .build();
+        clientService.saveClient(client);
+
+        Optional<Client> byEmail = clientRepository.findByEmail(client.getEmail());
+
+        assertFalse(byEmail.isPresent());
+    }
+
+    @Test
+    @DisplayName("Check Validation last name")
+    void saveClientValidationLastName() {
+        Client client = Client.builder()
+                .firstName("mohammad")
+                .lastName("1234")
                 .email("123@gmail.com")
                 .password("Aa@12345")
                 .build();
@@ -69,6 +85,22 @@ class ClientServiceTest {
         Optional<Client> byEmail = clientRepository.findByEmail(client.getEmail());
 
         assertFalse(byEmail.isPresent());
+    }
+
+    @Test
+    @DisplayName("Check Duplicate email")
+    void saveClientDuplicateEmail() {
+        Client client = Client.builder()
+                .firstName("saba")
+                .lastName("salmanzade")
+                .email("mohammadreza@gmail.com")
+                .password("Aa@12345")
+                .build();
+        clientService.saveClient(client);
+
+        Optional<Client> byEmail = clientRepository.findByEmail(client.getEmail());
+
+        assertTrue(byEmail.isPresent());
     }
 
     @Test
