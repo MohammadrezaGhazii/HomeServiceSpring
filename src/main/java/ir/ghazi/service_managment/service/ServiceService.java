@@ -5,6 +5,8 @@ import ir.ghazi.service_managment.repository.ServiceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class ServiceService {
@@ -14,7 +16,12 @@ public class ServiceService {
         this.serviceRepository = serviceRepository;
     }
 
-    public Services saveService(Services services){
+    public Services saveService(Services services) {
         return serviceRepository.save(services);
+    }
+
+    public List<Services> listServices() {
+        List<Services> servicesList = serviceRepository.findAll();
+        return servicesList;
     }
 }
