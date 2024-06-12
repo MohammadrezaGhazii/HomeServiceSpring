@@ -5,6 +5,8 @@ import ir.ghazi.service_managment.repository.SubServiceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class SubServiceService {
@@ -27,5 +29,9 @@ public class SubServiceService {
             log.error("An error in Save SubService");
             return null;
         }
+    }
+    public List<SubService> subServiceList() {
+        List<SubService> subServiceList = subServiceRepository.findAll();
+        return subServiceList;
     }
 }
