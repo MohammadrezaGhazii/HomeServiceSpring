@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +29,7 @@ class ClientServiceTest {
                 .lastName("ghazi")
                 .email("mohammadreza@gmail.com")
                 .password("Aa@12345")
+                .registerDate(LocalDate.now())
                 .build();
         Client clientSaved = clientService.saveClient(client);
 
