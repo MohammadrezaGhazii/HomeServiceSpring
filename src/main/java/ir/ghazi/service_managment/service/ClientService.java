@@ -3,6 +3,7 @@ package ir.ghazi.service_managment.service;
 import ir.ghazi.service_managment.base.exception.IllegalArgumentException;
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.model.Client;
+import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import ir.ghazi.service_managment.utilities.Validation;
 import lombok.extern.slf4j.Slf4j;
@@ -52,5 +53,12 @@ public class ClientService {
             log.error("An error in Client sign in ");
             return Optional.empty();
         }
+    }
+
+    public void updateClient(Client client) {
+        if (!Validation.isPasswordValid(client.getPassword())) {
+            log.warn("password is not strong ! || Enter like : Aa@12345");
+        } else
+            clientRepository.save(client);
     }
 }

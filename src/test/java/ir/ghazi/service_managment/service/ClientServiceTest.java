@@ -1,6 +1,7 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.model.Client;
+import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,26 @@ class ClientServiceTest {
     void clientSignInError() {
         Optional<Client> client = clientService.clientSignIn("notsign@gmail.com", "Aa@12345");
         assertFalse(client.isPresent());
+    }
+
+    @Test
+    @DisplayName("Check for update password")
+    void updatePassword(){
+        Optional<Client> byEmail = clientRepository.findByEmail("mohammadreza@gmail.com");
+        Client client = byEmail.get();
+        client.setPassword("Mm@12345");
+        clientService.updateClient(client);
+
+        assertEquals(client.getPassword(),"Mm@12345" );
+    }
+    @Test
+    @DisplayName("Check for dont update password")
+    void dontUpdatePassword(){
+        Optional<Client> byEmail = clientRepository.findByEmail("mohammadreza@gmail.com");
+        Client client = byEmail.get();
+        client.setPassword("123aaa");
+        clientService.updateClient(client);
+
+        assertNotEquals(client.getPassword(),"Mm@12345");
     }
 }
