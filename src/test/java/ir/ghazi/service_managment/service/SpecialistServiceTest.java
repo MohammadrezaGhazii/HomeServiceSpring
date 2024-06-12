@@ -221,4 +221,14 @@ class SpecialistServiceTest {
 
         assertEquals(specialist.getPassword(),"Mm@12345" );
     }
+    @Test
+    @DisplayName("Check for dont update password")
+    void dontUpdatePassword(){
+        Optional<Specialist> byEmail = specialistRepository.findByEmail("mohammadreza@gmail.com");
+        Specialist specialist = byEmail.get();
+        specialist.setPassword("123aaa");
+        specialistService.updateSpecialist(specialist);
+
+        assertNotEquals(specialist.getPassword(),"Mm@12345");
+    }
 }
