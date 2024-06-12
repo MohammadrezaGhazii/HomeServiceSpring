@@ -23,7 +23,7 @@ public class Specialist extends Person {
     @Enumerated(EnumType.STRING)
     private SpecialistSituation situation;
 
-    @Lob
+    @ToString.Exclude
     @Column(name = "picture")
     private byte[] image;
 
