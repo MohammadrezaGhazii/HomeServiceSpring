@@ -1,7 +1,6 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.model.Client;
-import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

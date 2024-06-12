@@ -1,15 +1,12 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.enums.SpecialistSituation;
-import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.Optional;
 
