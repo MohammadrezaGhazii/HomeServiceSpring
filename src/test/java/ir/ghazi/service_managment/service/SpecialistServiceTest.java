@@ -210,4 +210,15 @@ class SpecialistServiceTest {
                 specialistSignIn("notsign@gmail.com", "Aa@12345");
         assertFalse(client.isPresent());
     }
+
+    @Test
+    @DisplayName("Check for update password")
+    void updatePassword(){
+        Optional<Specialist> byEmail = specialistRepository.findByEmail("mohammadreza@gmail.com");
+        Specialist specialist = byEmail.get();
+        specialist.setPassword("Mm@12345");
+        specialistService.updateSpecialist(specialist);
+
+        assertEquals(specialist.getPassword(),"Mm@12345" );
+    }
 }

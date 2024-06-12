@@ -104,4 +104,11 @@ public class SpecialistService {
             return Optional.empty();
         }
     }
+
+    public void updateSpecialist(Specialist specialist) {
+        if (!Validation.isPasswordValid(specialist.getPassword())) {
+            log.warn("password is not strong ! || Enter like : Aa@12345");
+        } else
+            specialistRepository.save(specialist);
+    }
 }
