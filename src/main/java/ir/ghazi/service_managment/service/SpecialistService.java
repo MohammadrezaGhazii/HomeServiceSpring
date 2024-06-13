@@ -1,6 +1,7 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
+import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
 import ir.ghazi.service_managment.utilities.Validation;
@@ -100,5 +101,13 @@ public class SpecialistService {
             log.warn("password is not strong ! || Enter like : Aa@12345");
         } else
             specialistRepository.save(specialist);
+    }
+
+    public void acceptSpecialist (String email){
+        Specialist specialist = specialistRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Specialist with " + email + " does not found"));
+
+        specialist.setSituation(SpecialistSituation.APPROVED);
+        specialistRepository.save(specialist);
     }
 }

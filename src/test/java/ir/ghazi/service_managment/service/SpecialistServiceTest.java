@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
@@ -38,6 +39,20 @@ class SpecialistServiceTest {
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
         Specialist saveSpecialist = specialistService.saveSpecialist(specialist);
+
+        String filePath1 = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
+        byte[] bytesImage1 = specialistService.uploadPhoto(filePath1);
+        Specialist specialist1 = Specialist.builder()
+                .firstName("ali")
+                .lastName("ghazi")
+                .email("ali@gmail.com")
+                .password("Aa@12345")
+                .registerDate(LocalDate.now())
+                .image(bytesImage1)
+                .score(0D)
+                .situation(SpecialistSituation.NEW_JOINER)
+                .build();
+        specialistService.saveSpecialist(specialist1);
 
         Optional<Specialist> byEmail = specialistRepository.findByEmail(saveSpecialist.getEmail());
         assertNotNull(byEmail);
@@ -248,5 +263,16 @@ class SpecialistServiceTest {
         specialistService.updateSpecialist(specialist);
 
         assertNotEquals(specialist.getPassword(),"Mm@12345");
+    }
+
+    @Test
+    @DisplayName("approve specialist")
+    void approveSpecialist(){
+        specialistService.acceptSpecialist("ali@gmail.com");
+
+        Specialist specialist = specialistRepository.findByEmail("ali@gmail.com")
+                .orElseThrow(() -> new NotFoundException("Not found"));
+
+        assertEquals(specialist.getSituation(), SpecialistSituation.APPROVED);
     }
 }
