@@ -21,26 +21,21 @@ public class ClientService {
     }
 
     public Client saveClient(Client client) {
-        try {
-            if (!Validation.isNameValid(client.getFirstName())) {
-                log.warn("Firstname should just in letters");
-            } else if (!Validation.isNameValid(client.getLastName())) {
-                log.warn("Lastname should just in letters");
-            } else if (!Validation.isEmailValid(client.getEmail())) {
-                log.warn("Email is not valid ! || Enter like this : johnsons@gmail.com");
-            } else if (!Validation.isPasswordValid(client.getPassword())) {
-                log.warn("password is not strong ! || Enter like : Aa@12345");
-            } else if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
-                log.warn("This " + client.getEmail() + " is already registered !!!");
-            } else {
-                clientRepository.save(client);
-                log.info(client.getEmail() + " has successfully add !");
-            }
-            return client;
-        } catch (Exception e) {
-            log.error("An error in Client sign up ");
-            return null;
+        if (!Validation.isNameValid(client.getFirstName())) {
+            log.warn("Firstname should just in letters");
+        } else if (!Validation.isNameValid(client.getLastName())) {
+            log.warn("Lastname should just in letters");
+        } else if (!Validation.isEmailValid(client.getEmail())) {
+            log.warn("Email is not valid ! || Enter like this : johnsons@gmail.com");
+        } else if (!Validation.isPasswordValid(client.getPassword())) {
+            log.warn("password is not strong ! || Enter like : Aa@12345");
+        } else if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
+            log.warn("This " + client.getEmail() + " is already registered !!!");
+        } else {
+            clientRepository.save(client);
+            log.info(client.getEmail() + " has successfully add !");
         }
+        return client;
     }
 
     public Optional<Client> clientSignIn(String email, String password) {
