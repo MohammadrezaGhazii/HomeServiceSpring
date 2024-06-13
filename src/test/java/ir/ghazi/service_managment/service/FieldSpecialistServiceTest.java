@@ -9,7 +9,6 @@ import ir.ghazi.service_managment.repository.SubServiceRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -57,10 +56,5 @@ class FieldSpecialistServiceTest {
 
         assertTrue(byId.isPresent());
         assertTrue(byId1.isPresent());
-    }
-
-    @Test
-    @DisplayName("delete field to specialist")
-    void deleteFieldSpecialist(){
     }
 }
