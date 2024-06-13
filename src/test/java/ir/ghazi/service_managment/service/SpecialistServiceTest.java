@@ -111,6 +111,27 @@ class SpecialistServiceTest {
     }
 
     @Test
+    @DisplayName("Check Duplicate email")
+    void saveSpecialistDuplicateEmail() {
+        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
+        byte[] bytesImage = specialistService.uploadPhoto(filePath);
+        Specialist specialist = Specialist.builder()
+                .firstName("mohammad")
+                .lastName("ghazi")
+                .email("mohammadreza@gmail.com")
+                .password("Aa@12345")
+                .registerDate(LocalDate.now())
+                .image(bytesImage)
+                .score(0D)
+                .situation(SpecialistSituation.NEW_JOINER)
+                .build();
+        Specialist saveSpecialist = specialistService.saveSpecialist(specialist);
+
+        Optional<Specialist> byEmail = specialistRepository.findByEmail(saveSpecialist.getEmail());
+        assertTrue(byEmail.isPresent());
+    }
+
+    @Test
     @DisplayName("Check Validation password")
     void saveSpecialistValidationPassword() {
         String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
