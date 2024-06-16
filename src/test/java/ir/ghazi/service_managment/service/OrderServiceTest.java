@@ -65,4 +65,14 @@ class OrderServiceTest {
 
         assertEquals(order.getOrderSituation() , OrderSituation.STARTED);
     }
+
+    @Test
+    @DisplayName("Change Situation to DONE")
+    void changeSituationToDone(){
+        orderService.changeSituationOrderToEnd(1L);
+        Optional<Order> byId = orderRepository.findById(1L);
+        Order order = byId.get();
+
+        assertEquals(order.getOrderSituation() , OrderSituation.DONE);
+    }
 }

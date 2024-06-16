@@ -60,4 +60,12 @@ public class OrderService {
             orderRepository.save(order);
         }
     }
+
+    public void changeSituationOrderToEnd(Long id){
+        Optional<Order> byId = orderRepository.findById(id);
+        Order order = byId.get();
+
+        order.setOrderSituation(OrderSituation.DONE);
+        orderRepository.save(order);
+    }
 }
