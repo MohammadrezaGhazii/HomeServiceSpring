@@ -7,6 +7,7 @@ import ir.ghazi.service_managment.model.SubService;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
 import ir.ghazi.service_managment.repository.SubServiceRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -53,5 +54,15 @@ class OrderServiceTest {
 
         Optional<Order> byId = orderRepository.findById(1L);
         assertTrue(byId.isPresent());
+    }
+
+    @Test
+    @DisplayName("Check time for change situation to STARTED")
+    void checkTimeForStartOrder(){
+        orderService.addStartWorkFromClient(1L);
+        Optional<Order> byId = orderRepository.findById(1L);
+        Order order = byId.get();
+
+        assertEquals(order.getOrderSituation() , OrderSituation.STARTED);
     }
 }

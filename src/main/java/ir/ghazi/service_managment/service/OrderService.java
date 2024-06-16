@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.FieldSpecialist;
 import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.model.Specialist;
@@ -9,6 +10,8 @@ import ir.ghazi.service_managment.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +41,23 @@ public class OrderService {
             if (bySpecialistAndSubService.isPresent()) {
                 log.info("There is any data's");
             }
+        }
+    }
+
+    public void addStartWorkFromClient(Long id) {
+        Optional<Order> byId = orderRepository.findById(id);
+        Order order = byId.get();
+        LocalDate localDate = LocalDate.now();
+        LocalTime localTime = LocalTime.now();
+
+        LocalDate requestedDate = order.getRequestedDate();
+        LocalTime requestedTime = order.getRequestedTime();
+
+        if (localDate.isBefore(requestedDate) && localTime.isBefore(requestedTime)) {
+            log.error("You can confirm the order to STARTED after " + localDate + " " + localTime);
+        } else {
+            order.setOrderSituation(OrderSituation.STARTED);
+            orderRepository.save(order);
         }
     }
 }
