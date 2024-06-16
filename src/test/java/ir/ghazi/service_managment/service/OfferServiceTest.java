@@ -1,5 +1,7 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.enums.OfferSituation;
+import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.Offer;
 import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.model.Specialist;
@@ -44,6 +46,7 @@ class OfferServiceTest {
                 .requestedDate(LocalDate.of(2024,7,16))
                 .requestedTime(LocalTime.of(20,50))
                 .timeTodo(120D)
+                .offerSituation(OfferSituation.WAITING)
                 .order(order)
                 .specialist(specialist)
                 .build();
@@ -124,5 +127,27 @@ class OfferServiceTest {
         List<Double> doubles = offerService.listByScoreSpecialist(1L);
 
         assertEquals(doubles.size() , 3);
+    }
+
+    @DisplayName("Choose offer from client")
+    @Test
+    void chooseOfferFromClient(){
+        Optional<Offer> byIdOffer = offerRepository.findById(1L);
+        Offer offer = byIdOffer.get();
+        offerService.chooseOfferFromClient(offer);
+        Order order = offer.getOrder();
+
+        assertEquals(offer.getOfferSituation(), OfferSituation.ACCEPTED);
+        assertEquals(order.getOrderSituation(), OrderSituation.WAIT_FOR_SPECIALIST_COMING);
+    }
+
+    @DisplayName("Choose offer from client Error")
+    @Test
+    void chooseOfferFromClientError(){
+        Optional<Offer> byIdOffer = offerRepository.findById(1L);
+        Offer offer = byIdOffer.get();
+        offerService.chooseOfferFromClient(offer);
+
+        assertEquals(offer.getOfferSituation(), OfferSituation.ACCEPTED);
     }
 }

@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.enums.OfferSituation;
 import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.*;
 import ir.ghazi.service_managment.repository.FieldSpecialistRepository;
@@ -81,5 +82,18 @@ public class OfferService {
             log.info(String.valueOf(offerSpecialistScore));
         }
         return offerSpecialistScores;
+    }
+
+    public void chooseOfferFromClient(Offer offer){
+        Order order = offer.getOrder();
+        if (offer.getOfferSituation().equals(OfferSituation.ACCEPTED)){
+            log.error("This Order has been done");
+        }
+        else {
+            offer.setOfferSituation(OfferSituation.ACCEPTED);
+            offerRepository.save(offer);
+            order.setOrderSituation(OrderSituation.WAIT_FOR_SPECIALIST_COMING);
+            orderRepository.save(order);
+        }
     }
 }
