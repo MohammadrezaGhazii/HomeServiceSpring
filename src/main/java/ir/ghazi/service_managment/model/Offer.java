@@ -1,10 +1,8 @@
 package ir.ghazi.service_managment.model;
 
 import ir.ghazi.service_managment.base.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import ir.ghazi.service_managment.enums.OfferSituation;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +31,10 @@ public class Offer extends BaseEntity<Long> {
 
     @Column(name = "time_todo")
     private Double timeTodo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "offer_situation")
+    private OfferSituation offerSituation;
 
     @ManyToOne
     @JoinColumn(name = "specialist_id")
