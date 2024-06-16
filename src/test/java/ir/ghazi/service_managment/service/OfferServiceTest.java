@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,5 +108,21 @@ class OfferServiceTest {
 
         Optional<Offer> byId = offerRepository.findById(2L);
         assertFalse(byId.isPresent());
+    }
+
+    @DisplayName("List offers by sort offer price")
+    @Test
+    void sortOfferPrice(){
+        List<Double> doubles = offerService.listByOfferPrice(1L);
+
+        assertEquals(doubles.size() , 3);
+    }
+
+    @DisplayName("List offers by sort offer specialist scores")
+    @Test
+    void sortOfferSpecialistScores(){
+        List<Double> doubles = offerService.listByScoreSpecialist(1L);
+
+        assertEquals(doubles.size() , 3);
     }
 }
