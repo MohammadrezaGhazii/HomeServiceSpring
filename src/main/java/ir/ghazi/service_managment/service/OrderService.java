@@ -36,11 +36,7 @@ public class OrderService {
                     fieldSpecialistRepository.findBySpecialistAndSubService(specialist, subService1);
 
             if (bySpecialistAndSubService.isPresent()) {
-                System.out.println("Order Sub Service : " + order.getSubService().getName() +
-                        " Explain " + order.getExplain() +
-                        " Order Address : " + order.getAddress() +
-                        " Requested Date : " + order.getRequestedDate() +
-                        " Requested Time : " + order.getRequestedTime());
+                log.info("There is any data's");
             }
         }
     }
