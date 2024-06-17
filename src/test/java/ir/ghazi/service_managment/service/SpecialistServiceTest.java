@@ -275,4 +275,12 @@ class SpecialistServiceTest {
 
         assertEquals(specialist.getSituation(), SpecialistSituation.APPROVED);
     }
+
+    @Test
+    @DisplayName("check account situation")
+    void checkAccountSituation(){
+        boolean check = specialistService.checkAccepted("ali@gmail.com");
+
+        assertTrue(check);
+    }
 }
