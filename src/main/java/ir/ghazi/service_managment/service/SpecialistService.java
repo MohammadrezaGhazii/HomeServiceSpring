@@ -103,7 +103,7 @@ public class SpecialistService {
             specialistRepository.save(specialist);
     }
 
-    public void acceptSpecialist (String email){
+    public void acceptSpecialist(String email) {
         Specialist specialist = specialistRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Specialist with " + email + " does not found"));
 
@@ -111,15 +111,14 @@ public class SpecialistService {
         specialistRepository.save(specialist);
     }
 
-    public boolean checkAccepted(String email){
+    public boolean checkAccepted(String email) {
         Specialist specialist = specialistRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Specialist with " + email + " does not found"));
 
-        if (specialist.getSituation().equals(SpecialistSituation.NEW_JOINER)){
+        if (specialist.getSituation().equals(SpecialistSituation.NEW_JOINER)) {
             log.error("You should wait until admin Approve your account");
             return false;
-        }
-        else
+        } else
             return true;
     }
 }

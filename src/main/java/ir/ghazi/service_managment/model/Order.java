@@ -31,10 +31,10 @@ public class Order extends BaseEntity<Long> {
     @Column(name = "requested_time")
     private LocalTime requestedTime;
 
-    @Column(name = "address" , nullable = false)
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "explain" , nullable = false)
+    @Column(name = "explain", nullable = false)
     private String explain;
 
     @Enumerated(EnumType.STRING)
@@ -49,7 +49,7 @@ public class Order extends BaseEntity<Long> {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "order" ,fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH} )
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Offer> offers = new ArrayList<>();
 }

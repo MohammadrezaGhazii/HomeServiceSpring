@@ -137,22 +137,23 @@ class ClientServiceTest {
 
     @Test
     @DisplayName("Check for update password")
-    void updatePassword(){
+    void updatePassword() {
         Optional<Client> byEmail = clientRepository.findByEmail("mohammadreza@gmail.com");
         Client client = byEmail.get();
         client.setPassword("Mm@12345");
         clientService.updateClient(client);
 
-        assertEquals(client.getPassword(),"Mm@12345" );
+        assertEquals(client.getPassword(), "Mm@12345");
     }
+
     @Test
     @DisplayName("Check for dont update password")
-    void dontUpdatePassword(){
+    void dontUpdatePassword() {
         Optional<Client> byEmail = clientRepository.findByEmail("mohammadreza@gmail.com");
         Client client = byEmail.get();
         client.setPassword("123aaa");
         clientService.updateClient(client);
 
-        assertNotEquals(client.getPassword(),"Mm@12345");
+        assertNotEquals(client.getPassword(), "Mm@12345");
     }
 }

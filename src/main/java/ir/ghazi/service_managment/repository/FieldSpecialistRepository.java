@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface FieldSpecialistRepository extends JpaRepository<FieldSpecialist, Long> {
-    Optional<FieldSpecialist> findBySpecialistAndSubService (Specialist specialist , SubService subService);
+    Optional<FieldSpecialist> findBySpecialistAndSubService(Specialist specialist, SubService subService);
 }

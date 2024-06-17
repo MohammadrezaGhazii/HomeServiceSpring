@@ -17,14 +17,13 @@ public class AdminService {
         this.adminRepository = adminRepository;
     }
 
-    public Optional<Admin> signInAdmin(String email , String password){
+    public Optional<Admin> signInAdmin(String email, String password) {
         try {
             Optional<Admin> find = adminRepository.findByEmailAndPassword(email, password);
             find.orElseThrow(() -> new NotFoundException("Entity not found"));
             log.info("Welcome " + find.get().getFirstName());
             return find;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("An error in Admin sign in ");
             return Optional.empty();
         }

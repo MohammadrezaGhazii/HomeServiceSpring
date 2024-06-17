@@ -32,25 +32,22 @@ public class OfferService {
 
     public void saveOffer(Offer offer, Order order, Specialist specialist) {
         SubService subServiceOrder = order.getSubService();
-        orderService.listOrderBySubServiceAndSpecialist(subServiceOrder , specialist);
+        orderService.listOrderBySubServiceAndSpecialist(subServiceOrder, specialist);
 
         Optional<FieldSpecialist> bySpecialistAndSubService =
                 fieldSpecialistRepository.findBySpecialistAndSubService(specialist, subServiceOrder);
 
         if (bySpecialistAndSubService.isEmpty()) {
             log.error("You can't choose this");
-        }
-        else if (!order.getOrderSituation().equals(OrderSituation.WAIT_FOR_SPECIALIST_OFFER)){
+        } else if (!order.getOrderSituation().equals(OrderSituation.WAIT_FOR_SPECIALIST_OFFER)) {
             log.error("This order is done !!!");
-        }
-        else if (offer.getOfferPrice() < subServiceOrder.getBasePrice()){
+        } else if (offer.getOfferPrice() < subServiceOrder.getBasePrice()) {
             log.error("The price should be up than " + subServiceOrder.getBasePrice());
-        }
-        else
+        } else
             offerRepository.save(offer);
     }
 
-    public List<Double> listByOfferPrice(Long id){
+    public List<Double> listByOfferPrice(Long id) {
         Optional<Order> byId = orderRepository.findById(id);
         Order order = byId.get();
 
@@ -67,7 +64,7 @@ public class OfferService {
         return offerPrices;
     }
 
-    public List<Double> listByScoreSpecialist(Long id){
+    public List<Double> listByScoreSpecialist(Long id) {
         Optional<Order> byId = orderRepository.findById(id);
         Order order = byId.get();
 
@@ -84,12 +81,11 @@ public class OfferService {
         return offerSpecialistScores;
     }
 
-    public void chooseOfferFromClient(Offer offer){
+    public void chooseOfferFromClient(Offer offer) {
         Order order = offer.getOrder();
-        if (offer.getOfferSituation().equals(OfferSituation.ACCEPTED)){
+        if (offer.getOfferSituation().equals(OfferSituation.ACCEPTED)) {
             log.error("This Order has been done");
-        }
-        else {
+        } else {
             offer.setOfferSituation(OfferSituation.ACCEPTED);
             offerRepository.save(offer);
             order.setOrderSituation(OrderSituation.WAIT_FOR_SPECIALIST_COMING);

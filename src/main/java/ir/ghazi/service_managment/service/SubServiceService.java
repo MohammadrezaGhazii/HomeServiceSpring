@@ -30,6 +30,7 @@ public class SubServiceService {
             return null;
         }
     }
+
     public List<SubService> subServiceList() {
         List<SubService> subServiceList = subServiceRepository.findAll();
         return subServiceList;

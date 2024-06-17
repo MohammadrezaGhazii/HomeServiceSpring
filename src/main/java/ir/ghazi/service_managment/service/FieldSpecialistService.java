@@ -14,7 +14,7 @@ public class FieldSpecialistService {
         this.fieldSpecialistRepository = fieldSpecialistRepository;
     }
 
-    public void addFieldSpecialist(FieldSpecialist fieldSpecialist){
+    public void addFieldSpecialist(FieldSpecialist fieldSpecialist) {
         fieldSpecialistRepository.save(fieldSpecialist);
     }
 

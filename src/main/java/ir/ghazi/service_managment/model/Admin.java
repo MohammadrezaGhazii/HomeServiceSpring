@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 @ToString
 
 @Entity(name = "admin")
-public class Admin extends Person{
+public class Admin extends Person {
 }

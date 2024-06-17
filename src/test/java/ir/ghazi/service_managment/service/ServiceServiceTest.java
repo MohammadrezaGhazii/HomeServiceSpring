@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -44,10 +46,10 @@ class ServiceServiceTest {
 
     @Test
     @DisplayName("Check List Service")
-    void checkList(){
+    void checkList() {
         List<Services> services = serviceService.listServices();
         int sizeList = services.size();
 
-        assertEquals(sizeList , 2);
+        assertEquals(sizeList, 2);
     }
 }

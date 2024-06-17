@@ -36,5 +36,5 @@ public class Specialist extends Person {
 
     @OneToMany(mappedBy = "specialist", fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Offer> offers =new ArrayList<>();
+    private List<Offer> offers = new ArrayList<>();
 }

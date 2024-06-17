@@ -246,28 +246,29 @@ class SpecialistServiceTest {
 
     @Test
     @DisplayName("Check for update password")
-    void updatePassword(){
+    void updatePassword() {
         Optional<Specialist> byEmail = specialistRepository.findByEmail("mohammadreza@gmail.com");
         Specialist specialist = byEmail.get();
         specialist.setPassword("Mm@12345");
         specialistService.updateSpecialist(specialist);
 
-        assertEquals(specialist.getPassword(),"Mm@12345" );
+        assertEquals(specialist.getPassword(), "Mm@12345");
     }
+
     @Test
     @DisplayName("Check for dont update password")
-    void dontUpdatePassword(){
+    void dontUpdatePassword() {
         Optional<Specialist> byEmail = specialistRepository.findByEmail("mohammadreza@gmail.com");
         Specialist specialist = byEmail.get();
         specialist.setPassword("123aaa");
         specialistService.updateSpecialist(specialist);
 
-        assertNotEquals(specialist.getPassword(),"Mm@12345");
+        assertNotEquals(specialist.getPassword(), "Mm@12345");
     }
 
     @Test
     @DisplayName("approve specialist")
-    void approveSpecialist(){
+    void approveSpecialist() {
         specialistService.acceptSpecialist("ali@gmail.com");
 
         Specialist specialist = specialistRepository.findByEmail("ali@gmail.com")
@@ -278,7 +279,7 @@ class SpecialistServiceTest {
 
     @Test
     @DisplayName("check account situation")
-    void checkAccountSituation(){
+    void checkAccountSituation() {
         boolean check = specialistService.checkAccepted("ali@gmail.com");
 
         assertTrue(check);

@@ -19,7 +19,7 @@ import java.util.List;
 
 @Entity(name = "service")
 public class Services extends BaseEntity<Long> {
-    @Column(name = "service_name" , nullable = false)
+    @Column(name = "service_name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "service", fetch = FetchType.EAGER,

@@ -6,44 +6,57 @@ import java.util.regex.Pattern;
 
 public class Validation {
     private static final Pattern NAME_STRING_PATTERN;
+
     static {
         NAME_STRING_PATTERN = Pattern.compile("^[A-Za-z\\s]+$");
     }
-    public static Boolean isNameValid(String name){
+
+    public static Boolean isNameValid(String name) {
         Matcher matcher = NAME_STRING_PATTERN.matcher(name);
         return matcher.matches();
     }
-    private static final Pattern PASSWORD_PATTERN ;
+
+    private static final Pattern PASSWORD_PATTERN;
+
     static {
         PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])" +
-                "(?=.*[0-9])(?=.*[@#!%&*])[A-Za-z0-9@#!%&*]{8,10}$") ;
+                "(?=.*[0-9])(?=.*[@#!%&*])[A-Za-z0-9@#!%&*]{8,10}$");
     }
-    public static boolean isPasswordValid(String password){
+
+    public static boolean isPasswordValid(String password) {
         Matcher matcher = PASSWORD_PATTERN.matcher(password);
         return matcher.matches();
     }
 
-    private static final Pattern EMAIL_PATTERN ;
+    private static final Pattern EMAIL_PATTERN;
+
     static {
         EMAIL_PATTERN = Pattern.compile("^(.+)@(\\S+)$");
     }
-    public static boolean isEmailValid(String email){
+
+    public static boolean isEmailValid(String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         return matcher.matches();
     }
+
     private static final Pattern PHONE_PATTERN;
+
     static {
         PHONE_PATTERN = Pattern.compile("(0|\\+98)?([ ]|-|[()]){0,2}9[1|2|3|4]([ ]|-|[()]){0,2}(?:[0-9]([ ]|-|[()]){0,2}){8}");
     }
-    public static boolean isNumberValid(String phone){
+
+    public static boolean isNumberValid(String phone) {
         Matcher matcher = PHONE_PATTERN.matcher(phone);
         return matcher.matches();
     }
+
     private static final Pattern WEBSITE_PATTERN;
+
     static {
         WEBSITE_PATTERN = Pattern.compile("((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)");
     }
-    public static boolean isWebsiteValid(String website){
+
+    public static boolean isWebsiteValid(String website) {
         Matcher matcher = WEBSITE_PATTERN.matcher(website);
         return matcher.matches();
     }

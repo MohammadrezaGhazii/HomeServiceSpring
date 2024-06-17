@@ -20,9 +20,9 @@ import java.util.List;
 @ToString
 
 @Entity(name = "client")
-public class Client extends Person{
+public class Client extends Person {
 
-    @OneToMany(mappedBy = "client" ,fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH} )
-    private List<Order> orders=new ArrayList<>();
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Order> orders = new ArrayList<>();
 }

@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity(name = "rate")
 public class Rate extends BaseEntity<Long> {
-    @Column(name = "score" , nullable = false)
+    @Column(name = "score", nullable = false)
     private Score score;
 
     @Column(name = "comment")

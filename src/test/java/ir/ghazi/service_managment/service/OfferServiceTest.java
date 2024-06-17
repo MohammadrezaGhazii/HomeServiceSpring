@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OfferServiceTest {
@@ -43,14 +44,14 @@ class OfferServiceTest {
         Specialist specialist = specialistRepository.findByEmail("mohammadreza@gmail.com").get();
         Offer offer = Offer.builder()
                 .offerPrice(26000D)
-                .requestedDate(LocalDate.of(2024,7,16))
-                .requestedTime(LocalTime.of(20,50))
+                .requestedDate(LocalDate.of(2024, 7, 16))
+                .requestedTime(LocalTime.of(20, 50))
                 .timeTodo(120D)
                 .offerSituation(OfferSituation.WAITING)
                 .order(order)
                 .specialist(specialist)
                 .build();
-        offerService.saveOffer(offer,order,specialist);
+        offerService.saveOffer(offer, order, specialist);
 
         Optional<Offer> byId = offerRepository.findById(1L);
         assertTrue(byId.isPresent());
@@ -63,13 +64,13 @@ class OfferServiceTest {
         Specialist specialist = specialistRepository.findByEmail("mohammadreza@gmail.com").get();
         Offer offer = Offer.builder()
                 .offerPrice(20000D)
-                .requestedDate(LocalDate.of(2024,7,16))
-                .requestedTime(LocalTime.of(20,50))
+                .requestedDate(LocalDate.of(2024, 7, 16))
+                .requestedTime(LocalTime.of(20, 50))
                 .timeTodo(120D)
                 .order(order)
                 .specialist(specialist)
                 .build();
-        offerService.saveOffer(offer,order,specialist);
+        offerService.saveOffer(offer, order, specialist);
 
         Optional<Offer> byId = offerRepository.findById(2L);
         assertFalse(byId.isPresent());
@@ -82,13 +83,13 @@ class OfferServiceTest {
         Specialist specialist = specialistRepository.findByEmail("ali@gmail.com").get();
         Offer offer = Offer.builder()
                 .offerPrice(20000D)
-                .requestedDate(LocalDate.of(2024,7,16))
-                .requestedTime(LocalTime.of(20,50))
+                .requestedDate(LocalDate.of(2024, 7, 16))
+                .requestedTime(LocalTime.of(20, 50))
                 .timeTodo(120D)
                 .order(order)
                 .specialist(specialist)
                 .build();
-        offerService.saveOffer(offer,order,specialist);
+        offerService.saveOffer(offer, order, specialist);
 
         Optional<Offer> byId = offerRepository.findById(2L);
         assertFalse(byId.isPresent());
@@ -101,13 +102,13 @@ class OfferServiceTest {
         Specialist specialist = specialistRepository.findByEmail("mohammadreza@gmail.com").get();
         Offer offer = Offer.builder()
                 .offerPrice(20000D)
-                .requestedDate(LocalDate.of(2024,7,16))
-                .requestedTime(LocalTime.of(20,50))
+                .requestedDate(LocalDate.of(2024, 7, 16))
+                .requestedTime(LocalTime.of(20, 50))
                 .timeTodo(120D)
                 .order(order)
                 .specialist(specialist)
                 .build();
-        offerService.saveOffer(offer,order,specialist);
+        offerService.saveOffer(offer, order, specialist);
 
         Optional<Offer> byId = offerRepository.findById(2L);
         assertFalse(byId.isPresent());
@@ -115,23 +116,23 @@ class OfferServiceTest {
 
     @DisplayName("List offers by sort offer price")
     @Test
-    void sortOfferPrice(){
+    void sortOfferPrice() {
         List<Double> doubles = offerService.listByOfferPrice(1L);
 
-        assertEquals(doubles.size() , 3);
+        assertEquals(doubles.size(), 3);
     }
 
     @DisplayName("List offers by sort offer specialist scores")
     @Test
-    void sortOfferSpecialistScores(){
+    void sortOfferSpecialistScores() {
         List<Double> doubles = offerService.listByScoreSpecialist(1L);
 
-        assertEquals(doubles.size() , 3);
+        assertEquals(doubles.size(), 3);
     }
 
     @DisplayName("Choose offer from client")
     @Test
-    void chooseOfferFromClient(){
+    void chooseOfferFromClient() {
         Optional<Offer> byIdOffer = offerRepository.findById(1L);
         Offer offer = byIdOffer.get();
         offerService.chooseOfferFromClient(offer);
@@ -143,7 +144,7 @@ class OfferServiceTest {
 
     @DisplayName("Choose offer from client Error")
     @Test
-    void chooseOfferFromClientError(){
+    void chooseOfferFromClientError() {
         Optional<Offer> byIdOffer = offerRepository.findById(1L);
         Offer offer = byIdOffer.get();
         offerService.chooseOfferFromClient(offer);

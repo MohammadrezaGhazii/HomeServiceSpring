@@ -61,7 +61,7 @@ public class OrderService {
         }
     }
 
-    public void changeSituationOrderToEnd(Long id){
+    public void changeSituationOrderToEnd(Long id) {
         Optional<Order> byId = orderRepository.findById(id);
         Order order = byId.get();
 

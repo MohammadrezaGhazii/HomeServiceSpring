@@ -18,7 +18,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OrderServiceTest {
@@ -45,8 +47,8 @@ class OrderServiceTest {
                 .explain("Nothing")
                 .orderDate(LocalDate.now())
                 .orderSituation(OrderSituation.WAIT_FOR_SPECIALIST_OFFER)
-                .requestedDate(LocalDate.of(2024,8,22))
-                .requestedTime(LocalTime.of(20,50))
+                .requestedDate(LocalDate.of(2024, 8, 22))
+                .requestedTime(LocalTime.of(20, 50))
                 .client(client)
                 .subService(subService)
                 .build();
@@ -58,21 +60,21 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("Check time for change situation to STARTED")
-    void checkTimeForStartOrder(){
+    void checkTimeForStartOrder() {
         orderService.addStartWorkFromClient(1L);
         Optional<Order> byId = orderRepository.findById(1L);
         Order order = byId.get();
 
-        assertEquals(order.getOrderSituation() , OrderSituation.STARTED);
+        assertEquals(order.getOrderSituation(), OrderSituation.STARTED);
     }
 
     @Test
     @DisplayName("Change Situation to DONE")
-    void changeSituationToDone(){
+    void changeSituationToDone() {
         orderService.changeSituationOrderToEnd(1L);
         Optional<Order> byId = orderRepository.findById(1L);
         Order order = byId.get();
 
-        assertEquals(order.getOrderSituation() , OrderSituation.DONE);
+        assertEquals(order.getOrderSituation(), OrderSituation.DONE);
     }
 }

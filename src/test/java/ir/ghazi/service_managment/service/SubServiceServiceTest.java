@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SubServiceServiceTest {
@@ -67,12 +68,13 @@ class SubServiceServiceTest {
 
         assertFalse(byId.isPresent());
     }
+
     @Test
     @DisplayName("Check list sub services")
-    void listSubServices(){
+    void listSubServices() {
         List<SubService> subServiceList = subServiceService.subServiceList();
         int size = subServiceList.size();
 
-        assertEquals(size , 2);
+        assertEquals(size, 2);
     }
 }
