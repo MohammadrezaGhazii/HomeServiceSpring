@@ -8,8 +8,9 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface AdminMapper {
-    AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class );
+    AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
 
     Admin adminSaveRequestToModel(AdminRequest request);
+
     AdminResponse modelToUserSaveResponse(Admin admin);
 }
