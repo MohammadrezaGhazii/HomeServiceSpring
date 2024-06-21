@@ -6,6 +6,7 @@ import ir.ghazi.service_managment.repository.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,5 +28,10 @@ public class AdminService {
             log.error("An error in Admin sign in ");
             return Optional.empty();
         }
+    }
+
+    public Admin registerAdmin(Admin admin) {
+        Admin save = adminRepository.save(admin);
+        return save;
     }
 }
