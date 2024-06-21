@@ -6,7 +6,6 @@ import ir.ghazi.service_managment.repository.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -22,7 +21,7 @@ public class AdminService {
         try {
             Optional<Admin> find = adminRepository.findByEmailAndPassword(email, password);
             find.orElseThrow(() -> new NotFoundException("Entity not found"));
-            log.info("Welcome " + find.get().getFirstName());
+            log.info("Welcome " + find.get().getFirstName() + " " +find.get().getLastName());
             return find;
         } catch (Exception e) {
             log.error("An error in Admin sign in ");
