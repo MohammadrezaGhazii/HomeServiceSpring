@@ -31,7 +31,6 @@ public class AdminService {
     }
 
     public Admin registerAdmin(Admin admin) {
-        Admin save = adminRepository.save(admin);
-        return save;
+        return adminRepository.save(admin);
     }
 }
