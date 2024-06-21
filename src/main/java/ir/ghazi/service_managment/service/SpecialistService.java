@@ -1,6 +1,7 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
+import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 
@@ -53,35 +55,21 @@ public class SpecialistService {
         return contentType;
     }
 
-    public byte[] uploadPhoto(String filePath) {
-        byte[] photo = null;
-        while (true) {
-            File file = new File(filePath);
-            if (file.exists() && file.isFile()) {
-                if (file.length() <= 300 * 1024) {
-                    String fileType = getContentType(file);
-                    if (fileType.equals("image/jpeg")) {
-                        try {
-                            photo = Files.readAllBytes(file.toPath());
-                            break;
-                        } catch (Exception e) {
-                            log.error("Error reading file: " + e.getMessage());
-                            break;
-                        }
-                    } else {
-                        log.error("Invalid file format. Please upload a JPG file.");
-                        break;
-                    }
-                } else {
-                    log.error("File size exceeds 300KB. Please upload a smaller file.");
-                    break;
-                }
-            } else {
-                log.error("Invalid file path. Please try again.");
-                break;
-            }
+    public byte[] uploadPhoto(String filePath){
+        File file = new File(filePath);
+        if (!file.exists() || !file.isFile())
+            throw new ValidationException("Invalid file path. Please try again.");
+        if (file.length() >= 300 * 1024)
+            throw new ValidationException("File size exceeds 300KB. Please upload a smaller file.");
+        String fileType = getContentType(file);
+        if (!fileType.equals("image/jpeg"))
+            throw new ValidationException("Invalid file format. Please upload a JPG file.");
+        try {
+            return Files.readAllBytes(file.toPath());
         }
-        return photo;
+        catch (IOException e){
+            throw new ValidationException("Something Wrong");
+        }
     }
 
     public Optional<Specialist> specialistSignIn(String email, String password) {

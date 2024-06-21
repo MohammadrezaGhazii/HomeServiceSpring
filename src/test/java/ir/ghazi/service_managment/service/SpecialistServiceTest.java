@@ -1,6 +1,7 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
+import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
@@ -65,15 +66,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Validation name")
     void saveSpecialistValidationName() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("1234")
                 .lastName("ghazi")
                 .email("test9@gmail.com")
                 .password("Aa@12345")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -86,15 +84,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Validation last name")
     void saveSpecialistValidationLastName() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("mohammad")
                 .lastName("12345")
                 .email("test9@gmail.com")
                 .password("Aa@12345")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -107,15 +102,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Validation email")
     void saveSpecialistValidationEmail() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("mohammad")
                 .lastName("ghazi")
                 .email("asghar55")
                 .password("Aa@12345")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -128,15 +120,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Duplicate email")
     void saveSpecialistDuplicateEmail() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("mohammad")
                 .lastName("ghazi")
                 .email("mohammadreza@gmail.com")
                 .password("Aa@12345")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -149,15 +138,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Validation password")
     void saveSpecialistValidationPassword() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("mohammad")
                 .lastName("ghazi")
                 .email("test9@gmail.com")
                 .password("aa22")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -170,15 +156,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Wrong Format Image")
     void savaWithWrongFormatImage() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\codeyad-wallpaper-3.png";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("mohammadreza")
                 .lastName("ghazi")
                 .email("test2@gmail.com")
                 .password("Aa@12345")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -190,15 +173,12 @@ class SpecialistServiceTest {
     @Test
     @DisplayName("Check Wrong size Image")
     void savaWithWrongSizeImage() {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\up300.jpg";
-        byte[] bytesImage = specialistService.uploadPhoto(filePath);
         Specialist specialist = Specialist.builder()
                 .firstName("mohammadreza")
                 .lastName("ghazi")
                 .email("test3@gmail.com")
                 .password("Aa@12345")
                 .registerDate(LocalDate.now())
-                .image(bytesImage)
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
@@ -222,9 +202,10 @@ class SpecialistServiceTest {
                 .score(0D)
                 .situation(SpecialistSituation.NEW_JOINER)
                 .build();
-        Specialist saveSpecialist = specialistService.saveSpecialist(specialist);
-        Optional<Specialist> byEmail = specialistRepository.findByEmail(saveSpecialist.getEmail());
-        assertFalse(byEmail.isPresent());
+        ValidationException validationException = assertThrows
+                (ValidationException.class, () -> specialistService.saveSpecialist(specialist));
+
+        assertEquals(validationException.getMessage() , "Invalid file path. Please try again.");
     }
 
     @Test
