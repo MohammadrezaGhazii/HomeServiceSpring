@@ -23,7 +23,9 @@ public class SpecialistService {
         this.specialistRepository = specialistRepository;
     }
 
-    public Specialist saveSpecialist(Specialist specialist) {
+    public Specialist saveSpecialist(Specialist specialist , String filePath) {
+        byte[] bytes = uploadPhoto(filePath);
+        specialist.setImage(bytes);
         if (!Validation.isNameValid(specialist.getFirstName())) {
             log.warn("Firstname should just in letters");
         } else if (!Validation.isNameValid(specialist.getLastName())) {
@@ -34,7 +36,7 @@ public class SpecialistService {
             log.warn("password is not strong ! || Enter like : Aa@12345");
         } else if (specialistRepository.findByEmail(specialist.getEmail()).isPresent()) {
             log.warn("This " + specialist.getEmail() + " is already registered !!!");
-        } else if (specialist.getImage() == null) {
+        } else if (filePath == null) {
             log.warn("This " + specialist.getEmail() + " photo is not available !!!");
         } else {
             specialistRepository.save(specialist);

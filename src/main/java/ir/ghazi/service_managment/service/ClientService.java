@@ -1,6 +1,7 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
+import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import ir.ghazi.service_managment.utilities.Validation;
@@ -20,7 +21,7 @@ public class ClientService {
 
     public Client saveClient(Client client) {
         if (!Validation.isNameValid(client.getFirstName())) {
-            log.warn("Firstname should just in letters");
+            throw new ValidationException("Firstname should just in letters");
         } else if (!Validation.isNameValid(client.getLastName())) {
             log.warn("Lastname should just in letters");
         } else if (!Validation.isEmailValid(client.getEmail())) {
