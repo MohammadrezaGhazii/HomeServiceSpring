@@ -3,9 +3,11 @@ package ir.ghazi.service_managment.service;
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
+import ir.ghazi.service_managment.model.CreditSpecialist;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
 import ir.ghazi.service_managment.utilities.Validation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +18,12 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SpecialistService {
+
     private final SpecialistRepository specialistRepository;
 
-    public SpecialistService(SpecialistRepository specialistRepository) {
-        this.specialistRepository = specialistRepository;
-    }
+    private final CreditSpecialistService creditSpecialistService;
 
     public Specialist saveSpecialist(Specialist specialist , String filePath) {
         byte[] bytes = uploadPhoto(filePath);
@@ -40,6 +42,10 @@ public class SpecialistService {
             log.warn("This " + specialist.getEmail() + " photo is not available !!!");
         } else {
             specialistRepository.save(specialist);
+            CreditSpecialist creditSpecialist = CreditSpecialist.builder()
+                    .specialist(specialist)
+                    .build();
+            creditSpecialistService.addCredit(creditSpecialist);
             log.info(specialist.getEmail() + " has successfully add !");
         }
         return specialist;

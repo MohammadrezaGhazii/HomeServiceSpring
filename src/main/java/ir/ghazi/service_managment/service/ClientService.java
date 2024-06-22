@@ -1,10 +1,13 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.base.entity.BaseEntity;
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.model.Client;
+import ir.ghazi.service_managment.model.CreditClient;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import ir.ghazi.service_managment.utilities.Validation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +15,13 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ClientService {
+
     private final ClientRepository clientRepository;
 
-    public ClientService(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+    private final CreditClientService creditClientService;
+
 
     public Client saveClient(Client client) {
         if (!Validation.isNameValid(client.getFirstName())) {
@@ -32,6 +36,10 @@ public class ClientService {
             log.warn("This " + client.getEmail() + " is already registered !!!");
         } else {
             clientRepository.save(client);
+            CreditClient creditClient = CreditClient.builder()
+                    .client(client)
+                    .build();
+            creditClientService.addCredit(creditClient);
             log.info(client.getEmail() + " has successfully add !");
         }
         return client;
