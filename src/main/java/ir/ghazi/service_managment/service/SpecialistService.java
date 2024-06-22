@@ -27,13 +27,13 @@ public class SpecialistService {
         byte[] bytes = uploadPhoto(filePath);
         specialist.setImage(bytes);
         if (!Validation.isNameValid(specialist.getFirstName())) {
-            log.warn("Firstname should just in letters");
+            throw new ValidationException("Firstname should just in letters");
         } else if (!Validation.isNameValid(specialist.getLastName())) {
-            log.warn("Lastname should just in letters");
+            throw new ValidationException("Lastname should just in letters");
         } else if (!Validation.isEmailValid(specialist.getEmail())) {
-            log.warn("Email is not valid ! || Enter like this : johnsons@gmail.com");
+            throw new ValidationException("Email is not valid ! || Enter like this : johnsons@gmail.com");
         } else if (!Validation.isPasswordValid(specialist.getPassword())) {
-            log.warn("password is not strong ! || Enter like : Aa@12345");
+            throw new ValidationException("password is not strong ! || Enter like : Aa@12345");
         } else if (specialistRepository.findByEmail(specialist.getEmail()).isPresent()) {
             log.warn("This " + specialist.getEmail() + " is already registered !!!");
         } else if (filePath == null) {
