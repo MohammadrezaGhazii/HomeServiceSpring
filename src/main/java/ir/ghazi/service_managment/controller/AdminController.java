@@ -7,10 +7,7 @@ import ir.ghazi.service_managment.model.Admin;
 import ir.ghazi.service_managment.model.FieldSpecialist;
 import ir.ghazi.service_managment.model.Services;
 import ir.ghazi.service_managment.model.SubService;
-import ir.ghazi.service_managment.service.AdminService;
-import ir.ghazi.service_managment.service.FieldSpecialistService;
-import ir.ghazi.service_managment.service.ServiceService;
-import ir.ghazi.service_managment.service.SubServiceService;
+import ir.ghazi.service_managment.service.*;
 import jakarta.servlet.annotation.HttpConstraint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,8 @@ public class AdminController {
     private final SubServiceService subServiceService;
 
     private final FieldSpecialistService fieldSpecialistService;
+
+    private final SpecialistService specialistService;
 
     @PostMapping("/register-admin")
     public ResponseEntity<AdminResponse> registerAdmin(@RequestBody AdminRequest request) {
@@ -67,5 +66,10 @@ public class AdminController {
     @GetMapping("/list-sub-services")
     public void listSubService(){
         subServiceService.subServiceList();
+    }
+
+    @PatchMapping("/approve-specialist")
+    public void approveSpecialist(@RequestParam String email){
+        specialistService.acceptSpecialist(email);
     }
 }
