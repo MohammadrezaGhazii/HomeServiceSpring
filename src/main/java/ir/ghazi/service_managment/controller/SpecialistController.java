@@ -19,10 +19,10 @@ public class SpecialistController {
     private final SpecialistService specialistService;
 
     @PostMapping("/register-specialist")
-    public ResponseEntity<SpecialistResponse> registerClient(@RequestBody SpecialistRequest request) {
-        String filePath = "C:\\Users\\user\\Desktop\\worker\\download.jpeg";
+    public ResponseEntity<SpecialistResponse> registerClient(@RequestBody SpecialistRequest request , String filePath) {
         Specialist mappedSpecialist = SpecialistMapper.INSTANCE.specialistSaveRequestToModel(request);
         Specialist savedSpecialist = specialistService.saveSpecialist(mappedSpecialist , filePath);
-        return new ResponseEntity<>(SpecialistMapper.INSTANCE.modelToSpecialistSaveResponse(savedSpecialist), HttpStatus.CREATED);
+        return new ResponseEntity<>(SpecialistMapper.INSTANCE.modelToSpecialistSaveResponse(savedSpecialist),
+                HttpStatus.CREATED);
     }
 }
