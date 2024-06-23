@@ -4,9 +4,11 @@ import ir.ghazi.service_managment.dto.admin.AdminRequest;
 import ir.ghazi.service_managment.dto.admin.AdminResponse;
 import ir.ghazi.service_managment.mapper.AdminMapper;
 import ir.ghazi.service_managment.model.Admin;
+import ir.ghazi.service_managment.model.FieldSpecialist;
 import ir.ghazi.service_managment.model.Services;
 import ir.ghazi.service_managment.model.SubService;
 import ir.ghazi.service_managment.service.AdminService;
+import ir.ghazi.service_managment.service.FieldSpecialistService;
 import ir.ghazi.service_managment.service.ServiceService;
 import ir.ghazi.service_managment.service.SubServiceService;
 import jakarta.servlet.annotation.HttpConstraint;
@@ -24,6 +26,8 @@ public class AdminController {
     private final ServiceService serviceService;
 
     private final SubServiceService subServiceService;
+
+    private final FieldSpecialistService fieldSpecialistService;
 
     @PostMapping("/register-admin")
     public ResponseEntity<AdminResponse> registerAdmin(@RequestBody AdminRequest request) {
@@ -47,5 +51,21 @@ public class AdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addSubService(@RequestBody SubService subService){
         subServiceService.savaSubService(subService);
+    }
+
+    @PostMapping("/add-field-specialist")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addFieldSpecialist(@RequestBody FieldSpecialist fieldSpecialist){
+        fieldSpecialistService.addFieldSpecialist(fieldSpecialist);
+    }
+
+    @GetMapping("/list-services")
+    public void listService(){
+        serviceService.listServices();
+    }
+
+    @GetMapping("/list-sub-services")
+    public void listSubService(){
+        subServiceService.subServiceList();
     }
 }
