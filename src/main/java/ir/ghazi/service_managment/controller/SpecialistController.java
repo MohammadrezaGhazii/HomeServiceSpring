@@ -1,9 +1,15 @@
 package ir.ghazi.service_managment.controller;
 
+import ir.ghazi.service_managment.dto.offer.OfferRequest;
+import ir.ghazi.service_managment.dto.offer.OfferResponse;
 import ir.ghazi.service_managment.dto.specialist.SpecialistRequest;
 import ir.ghazi.service_managment.dto.specialist.SpecialistResponse;
+import ir.ghazi.service_managment.mapper.OfferMapper;
 import ir.ghazi.service_managment.mapper.SpecialistMapper;
+import ir.ghazi.service_managment.model.Offer;
+import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.model.Specialist;
+import ir.ghazi.service_managment.service.OfferService;
 import ir.ghazi.service_managment.service.SpecialistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,23 +22,38 @@ public class SpecialistController {
 
     private final SpecialistService specialistService;
 
+    private final OfferService offerService;
+
     @PostMapping("/register-specialist")
-    public ResponseEntity<SpecialistResponse> registerClient(@RequestBody SpecialistRequest request , String filePath) {
+    public ResponseEntity<SpecialistResponse> registerClient(@RequestBody SpecialistRequest request, String filePath) {
         Specialist mappedSpecialist = SpecialistMapper.INSTANCE.specialistSaveRequestToModel(request);
-        Specialist savedSpecialist = specialistService.saveSpecialist(mappedSpecialist , filePath);
+        Specialist savedSpecialist = specialistService.saveSpecialist(mappedSpecialist, filePath);
         return new ResponseEntity<>(SpecialistMapper.INSTANCE.modelToSpecialistSaveResponse(savedSpecialist),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("/sign-in-specialist")
-    public void signInSpecialist(@RequestParam String email , String password){
+    public void signInSpecialist(@RequestParam String email, String password) {
         specialistService.specialistSignIn(email, password);
     }
 
     @PatchMapping("/change-password-specialist")
-    public void changePassword(@RequestParam String email , String passwordRequest){
+    public void changePassword(@RequestParam String email, String passwordRequest) {
         Specialist specialist = specialistService.findByEmail(email);
         specialist.setPassword(passwordRequest);
         specialistService.updateSpecialist(specialist);
     }
+
+    @PostMapping("/add-offer")
+    public ResponseEntity<OfferResponse> addOffer
+            (@RequestBody OfferRequest request , Long order , Long specialist) {
+        Offer mappedOffer = OfferMapper.INSTANCE.offerSaveRequestToModel(request);
+        Offer savedOffer = offerService.saveOffer(mappedOffer,order,specialist);
+        return new ResponseEntity<>(OfferMapper.INSTANCE.modelToOfferSaveResponse(savedOffer), HttpStatus.CREATED);
+    }
+
+//    @PostMapping("/add-offer")
+//    public void addOffer (@RequestBody Offer offer){
+//        offerService.saveOffer(offer);
+//    }
 }

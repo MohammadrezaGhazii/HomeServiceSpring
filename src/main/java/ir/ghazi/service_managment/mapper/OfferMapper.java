@@ -13,6 +13,4 @@ public interface OfferMapper {
     Offer offerSaveRequestToModel(OfferRequest request);
 
     OfferResponse modelToOfferSaveResponse(Offer offer);
-
-//    ListOfferResponse modelToListSubServiceResponse(SubService subService);
 }

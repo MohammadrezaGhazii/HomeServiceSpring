@@ -1,11 +1,14 @@
 package ir.ghazi.service_managment.service;
 
+import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.enums.OfferSituation;
 import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.*;
 import ir.ghazi.service_managment.repository.FieldSpecialistRepository;
 import ir.ghazi.service_managment.repository.OfferRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
+import ir.ghazi.service_managment.repository.SpecialistRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,35 +19,46 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OfferService {
 
     private final OfferRepository offerRepository;
-    private final FieldSpecialistRepository fieldSpecialistRepository;
-    private final OrderService orderService;
+    private final FieldSpecialistService fieldSpecialistService;
     private final OrderRepository orderRepository;
+    private final SpecialistRepository specialistRepository;
 
-    public OfferService(OfferRepository offerRepository, FieldSpecialistRepository fieldSpecialistRepository, OrderService orderService, OrderRepository orderRepository) {
-        this.offerRepository = offerRepository;
-        this.fieldSpecialistRepository = fieldSpecialistRepository;
-        this.orderService = orderService;
-        this.orderRepository = orderRepository;
-    }
+    public Offer saveOffer(Offer offer, Long order, Long specialist) {
+        Optional<Order> byIdOrder = orderRepository.findById(order);
+        Optional<Specialist> byIdSpecialist = specialistRepository.findById(specialist);
 
-    public void saveOffer(Offer offer, Order order, Specialist specialist) {
-        SubService subServiceOrder = order.getSubService();
-        orderService.listOrderBySubServiceAndSpecialist(subServiceOrder, specialist);
+
+        if (byIdOrder.isEmpty() && byIdSpecialist.isEmpty()) {
+            throw new NotFoundException("order or specialist does not exist");
+        }
+
+        Order order1 = byIdOrder.get();
+        SubService subService = order1.getSubService();
+        Specialist specialist1 = byIdSpecialist.get();
+
+        offer.setOrder(order1);
+        offer.setSpecialist(specialist1);
+
 
         Optional<FieldSpecialist> bySpecialistAndSubService =
-                fieldSpecialistRepository.findBySpecialistAndSubService(specialist, subServiceOrder);
+                fieldSpecialistService.findBySpecialistAndSubService(specialist1, subService);
+
+        Offer save = new Offer();
 
         if (bySpecialistAndSubService.isEmpty()) {
             log.error("You can't choose this");
-        } else if (!order.getOrderSituation().equals(OrderSituation.WAIT_FOR_SPECIALIST_OFFER)) {
+        } else if (!order1.getOrderSituation().equals(OrderSituation.WAIT_FOR_SPECIALIST_OFFER)) {
             log.error("This order is done !!!");
-        } else if (offer.getOfferPrice() < subServiceOrder.getBasePrice()) {
-            log.error("The price should be up than " + subServiceOrder.getBasePrice());
-        } else
-            offerRepository.save(offer);
+        } else if (offer.getOfferPrice() < subService.getBasePrice()) {
+            log.error("The price should be up than " + subService.getBasePrice());
+        } else {
+            save = offerRepository.save(offer);
+        }
+        return save;
     }
 
     public List<Double> listByOfferPrice(Long id) {
