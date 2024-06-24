@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.mapper;
 
+import ir.ghazi.service_managment.dto.subservice.ListSubServiceResponse;
 import ir.ghazi.service_managment.dto.subservice.SubServiceRequest;
 import ir.ghazi.service_managment.dto.subservice.SubServiceResponse;
 import ir.ghazi.service_managment.model.SubService;
@@ -13,4 +14,6 @@ public interface SubServiceMapper {
     SubService subServiceSaveRequestToModel(SubServiceRequest request);
 
     SubServiceResponse modelToSubServiceSaveResponse(SubService subService);
+
+    ListSubServiceResponse modelToListSubServiceResponse(SubService subService);
 }
