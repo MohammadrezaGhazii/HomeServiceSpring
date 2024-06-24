@@ -26,8 +26,8 @@ public class OrderService {
         this.fieldSpecialistRepository = fieldSpecialistRepository;
     }
 
-    public void addOrder(Order order) {
-        orderRepository.save(order);
+    public Order addOrder(Order order) {
+        return orderRepository.save(order);
     }
 
     public void listOrderBySubServiceAndSpecialist(SubService subService, Specialist specialist) {
