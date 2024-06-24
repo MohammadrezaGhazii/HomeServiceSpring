@@ -2,7 +2,10 @@ package ir.ghazi.service_managment.controller;
 
 import ir.ghazi.service_managment.dto.client.ClientRequest;
 import ir.ghazi.service_managment.dto.client.ClientResponse;
+import ir.ghazi.service_managment.dto.order.OrderRequest;
+import ir.ghazi.service_managment.dto.order.OrderResponse;
 import ir.ghazi.service_managment.mapper.ClientMapper;
+import ir.ghazi.service_managment.mapper.OrderMapper;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.service.ClientService;
@@ -28,19 +31,21 @@ public class ClientController {
     }
 
     @GetMapping("/sign-in-client")
-    public void signInClient(@RequestParam String email , String password){
+    public void signInClient(@RequestParam String email, String password) {
         clientService.clientSignIn(email, password);
     }
 
     @PatchMapping("change-password")
-    public void changePassword(@RequestParam String email , String passwordRequest){
+    public void changePassword(@RequestParam String email, String passwordRequest) {
         Client client = clientService.findByEmail(email);
         client.setPassword(passwordRequest);
         clientService.updateClient(client);
     }
 
     @PostMapping("/add-order")
-    public void addOrder(@RequestBody Order order){
-        orderService.addOrder(order);
+    public ResponseEntity<OrderResponse> addOrder(@RequestBody OrderRequest request) {
+        Order mappedOrder = OrderMapper.INSTANCE.orderSaveRequestToModel(request);
+        Order savedOrder = orderService.addOrder(mappedOrder);
+        return new ResponseEntity<>(OrderMapper.INSTANCE.modelToOrderSaveResponse(savedOrder), HttpStatus.CREATED);
     }
 }
