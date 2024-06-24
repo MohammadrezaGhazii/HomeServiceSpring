@@ -4,6 +4,7 @@ import ir.ghazi.service_managment.dto.admin.AdminRequest;
 import ir.ghazi.service_managment.dto.admin.AdminResponse;
 import ir.ghazi.service_managment.dto.service.ServiceRequest;
 import ir.ghazi.service_managment.dto.service.ServiceResponse;
+import ir.ghazi.service_managment.dto.subservice.ListSubServiceResponse;
 import ir.ghazi.service_managment.dto.subservice.SubServiceRequest;
 import ir.ghazi.service_managment.dto.subservice.SubServiceResponse;
 import ir.ghazi.service_managment.mapper.AdminMapper;
@@ -18,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,13 +70,25 @@ public class AdminController {
     }
 
     @GetMapping("/list-services")
-    public void listService() {
-        serviceService.listServices();
+    public List<ServiceResponse> listService() {
+        List<Services> services = serviceService.listServices();
+        List<ServiceResponse> serviceResponseList = new ArrayList<>();
+        for (Services service : services) {
+            ServiceResponse serviceResponse = ServiceMapper.INSTANCE.modelToServiceSaveResponse(service);
+            serviceResponseList.add(serviceResponse);
+        }
+        return serviceResponseList;
     }
 
     @GetMapping("/list-sub-services")
-    public void listSubService() {
-        subServiceService.subServiceList();
+    public List<ListSubServiceResponse> listSubService() {
+        List<SubService> subServices = subServiceService.subServiceList();
+        List<ListSubServiceResponse> subServiceResponseList = new ArrayList<>();
+        for (SubService subService : subServices) {
+            ListSubServiceResponse listSubServiceResponse = SubServiceMapper.INSTANCE.modelToListSubServiceResponse(subService);
+            subServiceResponseList.add(listSubServiceResponse);
+        }
+        return subServiceResponseList;
     }
 
     @PatchMapping("/approve-specialist")
