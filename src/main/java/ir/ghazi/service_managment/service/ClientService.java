@@ -63,4 +63,14 @@ public class ClientService {
         } else
             clientRepository.save(client);
     }
+
+    public Client findByEmail(String email) {
+        Optional<Client> byEmail = clientRepository.findByEmail(email);
+        Client client = null;
+        if (byEmail.isPresent())
+            client = byEmail.get();
+        else
+            log.error("Email is not available");
+        return client;
+    }
 }

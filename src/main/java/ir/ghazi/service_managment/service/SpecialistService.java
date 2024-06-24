@@ -117,4 +117,14 @@ public class SpecialistService {
         } else
             return true;
     }
+
+    public Specialist findByEmail(String email){
+        Optional<Specialist> byEmail = specialistRepository.findByEmail(email);
+        Specialist specialist = null;
+        if (byEmail.isPresent())
+            specialist = byEmail.get();
+        else
+            log.error("Email is not available");
+        return specialist;
+    }
 }
