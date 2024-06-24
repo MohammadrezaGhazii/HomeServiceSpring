@@ -4,7 +4,9 @@ import ir.ghazi.service_managment.dto.client.ClientRequest;
 import ir.ghazi.service_managment.dto.client.ClientResponse;
 import ir.ghazi.service_managment.mapper.ClientMapper;
 import ir.ghazi.service_managment.model.Client;
+import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.service.ClientService;
+import ir.ghazi.service_managment.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class ClientController {
 
     private final ClientService clientService;
+
+    private final OrderService orderService;
 
     @PostMapping("/register-client")
     public ResponseEntity<ClientResponse> registerClient(@RequestBody ClientRequest request) {
@@ -33,5 +37,10 @@ public class ClientController {
         Client client = clientService.findByEmail(email);
         client.setPassword(passwordRequest);
         clientService.updateClient(client);
+    }
+
+    @PostMapping("/add-order")
+    public void addOrder(@RequestBody Order order){
+        orderService.addOrder(order);
     }
 }
