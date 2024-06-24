@@ -124,7 +124,7 @@ public class SpecialistService {
         if (byEmail.isPresent())
             specialist = byEmail.get();
         else
-            log.error("Email is not available");
+            throw new ValidationException("Email is not available");
         return specialist;
     }
 }

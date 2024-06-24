@@ -70,7 +70,7 @@ public class ClientService {
         if (byEmail.isPresent())
             client = byEmail.get();
         else
-            log.error("Email is not available");
+            throw new ValidationException("Email is not available");
         return client;
     }
 }
