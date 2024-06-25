@@ -25,7 +25,7 @@ public class SpecialistController {
     private final OfferService offerService;
 
     @PostMapping("/register-specialist")
-    public ResponseEntity<SpecialistResponse> registerClient(@RequestBody SpecialistRequest request, String filePath) {
+    public ResponseEntity<SpecialistResponse> registerSpecialist(@RequestBody SpecialistRequest request, String filePath) {
         Specialist mappedSpecialist = SpecialistMapper.INSTANCE.specialistSaveRequestToModel(request);
         Specialist savedSpecialist = specialistService.saveSpecialist(mappedSpecialist, filePath);
         return new ResponseEntity<>(SpecialistMapper.INSTANCE.modelToSpecialistSaveResponse(savedSpecialist),
