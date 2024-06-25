@@ -7,8 +7,10 @@ import ir.ghazi.service_managment.dto.order.OrderResponse;
 import ir.ghazi.service_managment.mapper.ClientMapper;
 import ir.ghazi.service_managment.mapper.OrderMapper;
 import ir.ghazi.service_managment.model.Client;
+import ir.ghazi.service_managment.model.Offer;
 import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.service.ClientService;
+import ir.ghazi.service_managment.service.OfferService;
 import ir.ghazi.service_managment.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,8 @@ public class ClientController {
     private final ClientService clientService;
 
     private final OrderService orderService;
+
+    private final OfferService offerService;
 
     @PostMapping("/register-client")
     public ResponseEntity<ClientResponse> registerClient(@RequestBody ClientRequest request) {
@@ -47,5 +51,31 @@ public class ClientController {
         Order mappedOrder = OrderMapper.INSTANCE.orderSaveRequestToModel(request);
         Order savedOrder = orderService.addOrder(mappedOrder);
         return new ResponseEntity<>(OrderMapper.INSTANCE.modelToOrderSaveResponse(savedOrder), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/list-by-price")
+    public void listByPrice(@RequestParam Long id) {
+        offerService.listByOfferPrice(id);
+    }
+
+    @GetMapping("/list-by-score")
+    public void listByScore(@RequestParam Long id) {
+        offerService.listByScoreSpecialist(id);
+    }
+
+    @PatchMapping("/choose-specialist")
+    public void chooseSpecialist(Long id) {
+        Offer offer = offerService.findById(id);
+        offerService.chooseOfferFromClient(offer);
+    }
+
+    @PatchMapping("/change-to-started")
+    public void changeStarted(Long id) {
+        orderService.addStartWorkFromClient(id);
+    }
+
+    @PatchMapping("/change-to-done")
+    public void changeDone(Long id){
+        orderService.changeSituationOrderToEnd(id);
     }
 }
