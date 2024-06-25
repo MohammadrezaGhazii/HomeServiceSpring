@@ -117,16 +117,16 @@ public class OfferService {
         return offer;
     }
 
-    public Specialist findSpecialistFromAcceptedOffer(Order order) {
+    public Offer findSpecialistFromAcceptedOffer(Order order) {
         Optional<Offer> byOrderAndAndOfferSituation =
                 offerRepository.findByOrderAndAndOfferSituation(order, OfferSituation.ACCEPTED);
 
-        Specialist specialist;
+        Offer offer;
         if (byOrderAndAndOfferSituation.isPresent()) {
-            specialist = byOrderAndAndOfferSituation.get().getSpecialist();
+            offer = byOrderAndAndOfferSituation.get();
         } else
             throw new NotFoundException("This order with Situation ACCEPTED is not found");
 
-        return specialist;
+        return offer;
     }
 }
