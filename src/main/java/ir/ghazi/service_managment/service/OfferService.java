@@ -4,7 +4,6 @@ import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.enums.OfferSituation;
 import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.*;
-import ir.ghazi.service_managment.repository.FieldSpecialistRepository;
 import ir.ghazi.service_managment.repository.OfferRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
@@ -116,5 +115,18 @@ public class OfferService {
             offer = byId.get();
 
         return offer;
+    }
+
+    public Specialist findSpecialistFromAcceptedOffer(Order order) {
+        Optional<Offer> byOrderAndAndOfferSituation =
+                offerRepository.findByOrderAndAndOfferSituation(order, OfferSituation.ACCEPTED);
+
+        Specialist specialist;
+        if (byOrderAndAndOfferSituation.isPresent()) {
+            specialist = byOrderAndAndOfferSituation.get().getSpecialist();
+        } else
+            throw new NotFoundException("This order with Situation ACCEPTED is not found");
+
+        return specialist;
     }
 }
