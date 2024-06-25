@@ -78,4 +78,11 @@ public class ClientController {
     public void changeDone(Long id){
         orderService.changeSituationOrderToEnd(id);
     }
+
+    @PatchMapping("/pay-by-wallet")
+    public void payWallet(Long id){
+        orderService.paymentWallet(id);
+    }
+
+
 }
