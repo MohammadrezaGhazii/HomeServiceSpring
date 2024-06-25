@@ -106,4 +106,15 @@ public class OfferService {
             orderRepository.save(order);
         }
     }
+
+    public Offer findById(Long id) {
+        Optional<Offer> byId = offerRepository.findById(id);
+        Offer offer;
+        if (byId.isEmpty())
+            throw new NotFoundException("This id is not available");
+        else
+            offer = byId.get();
+
+        return offer;
+    }
 }
