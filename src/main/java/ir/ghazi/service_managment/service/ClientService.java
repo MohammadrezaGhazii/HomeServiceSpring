@@ -7,10 +7,16 @@ import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.CreditClient;
 import ir.ghazi.service_managment.repository.ClientRepository;
 import ir.ghazi.service_managment.utilities.Validation;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,6 +27,8 @@ public class ClientService {
     private final ClientRepository clientRepository;
 
     private final CreditClientService creditClientService;
+
+    private final EntityManager entityManager;
 
 
     public Client saveClient(Client client) {
@@ -72,5 +80,16 @@ public class ClientService {
         else
             throw new ValidationException("Email is not available");
         return client;
+    }
+
+    public List<Client> filterClient(String column , String value){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Client> query = criteriaBuilder.createQuery(Client.class);
+        Root<Client> clientRoot = query.from(Client.class);
+
+        Predicate columnFilter = criteriaBuilder.equal(clientRoot.get(column), value);
+        query.where(criteriaBuilder.and(columnFilter));
+
+        return entityManager.createQuery(query).getResultList();
     }
 }

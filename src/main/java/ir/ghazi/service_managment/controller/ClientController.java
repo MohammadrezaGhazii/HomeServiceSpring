@@ -2,10 +2,12 @@ package ir.ghazi.service_managment.controller;
 
 import ir.ghazi.service_managment.dto.client.ClientRequest;
 import ir.ghazi.service_managment.dto.client.ClientResponse;
+import ir.ghazi.service_managment.dto.client.FilterClientResponse;
 import ir.ghazi.service_managment.dto.order.OrderRequest;
 import ir.ghazi.service_managment.dto.order.OrderResponse;
 import ir.ghazi.service_managment.dto.rate.RateRequest;
 import ir.ghazi.service_managment.dto.rate.RateResponse;
+import ir.ghazi.service_managment.dto.subservice.ListSubServiceResponse;
 import ir.ghazi.service_managment.mapper.ClientMapper;
 import ir.ghazi.service_managment.mapper.OrderMapper;
 import ir.ghazi.service_managment.mapper.RateMapper;
@@ -21,6 +23,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -96,5 +101,17 @@ public class ClientController {
         Rate mappedRate = RateMapper.INSTANCE.rateSaveRequestToModel(request);
         Rate savedRate = rateService.saveRate(mappedRate);
         return new ResponseEntity<>(RateMapper.INSTANCE.modelToRateSaveResponse(savedRate), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/filter-client")
+    public List<FilterClientResponse> filterClient(@RequestParam String column,String value){
+        List<Client> clients = clientService.filterClient(column, value);
+        List<FilterClientResponse> filterClientResponses = new ArrayList<>();
+
+        for (Client client : clients) {
+            FilterClientResponse filterClientResponse = ClientMapper.INSTANCE.modelToFilterClientResponse(client);
+            filterClientResponses.add(filterClientResponse);
+        }
+        return filterClientResponses;
     }
 }
