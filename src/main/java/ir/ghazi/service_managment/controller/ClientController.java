@@ -4,14 +4,19 @@ import ir.ghazi.service_managment.dto.client.ClientRequest;
 import ir.ghazi.service_managment.dto.client.ClientResponse;
 import ir.ghazi.service_managment.dto.order.OrderRequest;
 import ir.ghazi.service_managment.dto.order.OrderResponse;
+import ir.ghazi.service_managment.dto.rate.RateRequest;
+import ir.ghazi.service_managment.dto.rate.RateResponse;
 import ir.ghazi.service_managment.mapper.ClientMapper;
 import ir.ghazi.service_managment.mapper.OrderMapper;
+import ir.ghazi.service_managment.mapper.RateMapper;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.Offer;
 import ir.ghazi.service_managment.model.Order;
+import ir.ghazi.service_managment.model.Rate;
 import ir.ghazi.service_managment.service.ClientService;
 import ir.ghazi.service_managment.service.OfferService;
 import ir.ghazi.service_managment.service.OrderService;
+import ir.ghazi.service_managment.service.RateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,8 @@ public class ClientController {
     private final OrderService orderService;
 
     private final OfferService offerService;
+
+    private final RateService rateService;
 
     @PostMapping("/register-client")
     public ResponseEntity<ClientResponse> registerClient(@RequestBody ClientRequest request) {
@@ -75,14 +82,19 @@ public class ClientController {
     }
 
     @PatchMapping("/change-to-done")
-    public void changeDone(Long id){
+    public void changeDone(Long id) {
         orderService.changeSituationOrderToEnd(id);
     }
 
     @PatchMapping("/pay-by-wallet")
-    public void payWallet(Long id){
+    public void payWallet(Long id) {
         orderService.paymentWallet(id);
     }
 
-
+    @PostMapping("/add-rate")
+    public ResponseEntity<RateResponse> addRate(@RequestBody RateRequest request) {
+        Rate mappedRate = RateMapper.INSTANCE.rateSaveRequestToModel(request);
+        Rate savedRate = rateService.saveRate(mappedRate);
+        return new ResponseEntity<>(RateMapper.INSTANCE.modelToRateSaveResponse(savedRate), HttpStatus.CREATED);
+    }
 }
