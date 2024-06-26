@@ -1,7 +1,9 @@
 package ir.ghazi.service_managment.controller;
 
+import ir.ghazi.service_managment.dto.client.FilterClientResponse;
 import ir.ghazi.service_managment.dto.offer.OfferRequest;
 import ir.ghazi.service_managment.dto.offer.OfferResponse;
+import ir.ghazi.service_managment.dto.specialist.FilterSpecialistResponse;
 import ir.ghazi.service_managment.dto.specialist.SpecialistRequest;
 import ir.ghazi.service_managment.dto.specialist.SpecialistResponse;
 import ir.ghazi.service_managment.mapper.OfferMapper;
@@ -15,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,8 +57,16 @@ public class SpecialistController {
         return new ResponseEntity<>(OfferMapper.INSTANCE.modelToOfferSaveResponse(savedOffer), HttpStatus.CREATED);
     }
 
-//    @PostMapping("/add-offer")
-//    public void addOffer (@RequestBody Offer offer){
-//        offerService.saveOffer(offer);
-//    }
+    @GetMapping("/filter-specialist")
+    public List<FilterSpecialistResponse> filterSpecialist(@RequestParam String column, String value){
+        List<Specialist> specialists = specialistService.filterSpecialist(column, value);
+        List<FilterSpecialistResponse> filterSpecialistResponses = new ArrayList<>();
+
+        for (Specialist specialist : specialists) {
+            FilterSpecialistResponse filterSpecialistResponse =
+                    SpecialistMapper.INSTANCE.modelToFilterSpecialistResponse(specialist);
+            filterSpecialistResponses.add(filterSpecialistResponse);
+        }
+        return filterSpecialistResponses;
+    }
 }

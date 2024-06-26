@@ -3,10 +3,16 @@ package ir.ghazi.service_managment.service;
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
+import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.CreditSpecialist;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
 import ir.ghazi.service_managment.utilities.Validation;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -24,6 +31,8 @@ public class SpecialistService {
     private final SpecialistRepository specialistRepository;
 
     private final CreditSpecialistService creditSpecialistService;
+
+    private final EntityManager entityManager;
 
     public Specialist saveSpecialist(Specialist specialist , String filePath) {
         byte[] bytes = uploadPhoto(filePath);
@@ -126,5 +135,16 @@ public class SpecialistService {
         else
             throw new ValidationException("Email is not available");
         return specialist;
+    }
+
+    public List<Specialist> filterSpecialist(String column , String value){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Specialist> query = criteriaBuilder.createQuery(Specialist.class);
+        Root<Specialist> clientRoot = query.from(Specialist.class);
+
+        Predicate columnFilter = criteriaBuilder.equal(clientRoot.get(column), value);
+        query.where(criteriaBuilder.and(columnFilter));
+
+        return entityManager.createQuery(query).getResultList();
     }
 }
