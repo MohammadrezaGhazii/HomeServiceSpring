@@ -1,7 +1,10 @@
 package ir.ghazi.service_managment.mapper;
 
+import ir.ghazi.service_managment.dto.client.FilterClientResponse;
+import ir.ghazi.service_managment.dto.specialist.FilterSpecialistResponse;
 import ir.ghazi.service_managment.dto.specialist.SpecialistRequest;
 import ir.ghazi.service_managment.dto.specialist.SpecialistResponse;
+import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.Specialist;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -13,4 +16,6 @@ public interface SpecialistMapper {
     Specialist specialistSaveRequestToModel(SpecialistRequest request);
 
     SpecialistResponse modelToSpecialistSaveResponse(Specialist specialist);
+
+    FilterSpecialistResponse modelToFilterSpecialistResponse(Specialist specialist);
 }
