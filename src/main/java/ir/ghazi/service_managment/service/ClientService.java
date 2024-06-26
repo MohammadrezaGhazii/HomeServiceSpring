@@ -1,6 +1,5 @@
 package ir.ghazi.service_managment.service;
 
-import ir.ghazi.service_managment.base.entity.BaseEntity;
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.model.Client;
