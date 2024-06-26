@@ -5,6 +5,7 @@ import ir.ghazi.service_managment.dto.client.ClientResponse;
 import ir.ghazi.service_managment.dto.client.FilterClientResponse;
 import ir.ghazi.service_managment.dto.order.OrderRequest;
 import ir.ghazi.service_managment.dto.order.OrderResponse;
+import ir.ghazi.service_managment.dto.payment.PaymentRequest;
 import ir.ghazi.service_managment.dto.rate.RateRequest;
 import ir.ghazi.service_managment.dto.rate.RateResponse;
 import ir.ghazi.service_managment.dto.subservice.ListSubServiceResponse;
@@ -104,7 +105,7 @@ public class ClientController {
     }
 
     @GetMapping("/filter-client")
-    public List<FilterClientResponse> filterClient(@RequestParam String column,String value){
+    public List<FilterClientResponse> filterClient(@RequestParam String column, String value) {
         List<Client> clients = clientService.filterClient(column, value);
         List<FilterClientResponse> filterClientResponses = new ArrayList<>();
 
