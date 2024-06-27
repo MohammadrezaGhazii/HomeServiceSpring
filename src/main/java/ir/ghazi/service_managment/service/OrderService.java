@@ -2,6 +2,7 @@ package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.enums.OrderSituation;
+import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.*;
 import ir.ghazi.service_managment.repository.FieldSpecialistRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
@@ -95,6 +96,14 @@ public class OrderService {
 
         if (hour1 > hour){
             specialist.setScore(specialist.getScore()-(hour1-hour));
+            specialistRepository.save(specialist);
+            disableAccount(specialist);
+        }
+    }
+
+    public void disableAccount(Specialist specialist){
+        if (specialist.getScore() < 0){
+            specialist.setSituation(SpecialistSituation.APPROVE_PENDING);
             specialistRepository.save(specialist);
         }
     }
