@@ -5,6 +5,7 @@ import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.*;
 import ir.ghazi.service_managment.repository.FieldSpecialistRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
+import ir.ghazi.service_managment.repository.SpecialistRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class OrderService {
     private final CreditClientService creditClientService;
 
     private final CreditSpecialistService creditSpecialistService;
+
+    private final SpecialistService specialistService;
+
+    private final SpecialistRepository specialistRepository;
 
     public Order addOrder(Order order) {
         return orderRepository.save(order);
@@ -69,6 +74,29 @@ public class OrderService {
 
         order.setOrderSituation(OrderSituation.DONE);
         orderRepository.save(order);
+        checkForWorkTakeTime(order);
+    }
+
+    public void checkForWorkTakeTime(Order order){
+        LocalTime now = LocalTime.now();
+
+        Offer offer = offerService.findSpecialistFromAcceptedOffer(order);
+        Specialist specialist = offer.getSpecialist();
+        LocalTime requestedTime = offer.getRequestedTime();
+        Double timeTodo = offer.getTimeTodo();
+
+        double hours = timeTodo/60;
+
+        int hour = requestedTime.getHour();
+
+        hour = hour+(int) hours;
+
+        int hour1 = now.getHour();
+
+        if (hour1 > hour){
+            specialist.setScore(specialist.getScore()-(hour1-hour));
+            specialistRepository.save(specialist);
+        }
     }
 
     public void paymentWallet(Long id) {
