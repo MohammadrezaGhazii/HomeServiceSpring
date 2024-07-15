@@ -18,12 +18,14 @@ import ir.ghazi.service_managment.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -37,19 +39,21 @@ public class AdminController {
 
     private final SpecialistService specialistService;
 
-    @PostMapping("/register-admin")
+    @PostMapping("/register")
     public ResponseEntity<AdminResponse> registerAdmin(@RequestBody AdminRequest request) {
         Admin mappedAdmin = AdminMapper.INSTANCE.adminSaveRequestToModel(request);
         Admin savedAdmin = adminService.registerAdmin(mappedAdmin);
         return new ResponseEntity<>(AdminMapper.INSTANCE.modelToUserSaveResponse(savedAdmin), HttpStatus.CREATED);
     }
 
-    @GetMapping("/sign-in-admin")
+    @GetMapping("/sign-in")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void signInAdmin(@RequestParam String email, String password) {
         adminService.signInAdmin(email, password);
     }
 
     @PostMapping("/add-service")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ServiceResponse> addService(@RequestBody ServiceRequest request) {
         Services mappedService = ServiceMapper.INSTANCE.serviceSaveRequestToModel(request);
         Services savedService = serviceService.saveService(mappedService);
@@ -57,6 +61,7 @@ public class AdminController {
     }
 
     @PostMapping("/add-sub-service")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<SubServiceResponse> addSubService(@RequestBody SubServiceRequest request) {
         SubService mappedSubService = SubServiceMapper.INSTANCE.subServiceSaveRequestToModel(request);
         SubService savedSubService = subServiceService.savaSubService(mappedSubService);
@@ -65,6 +70,7 @@ public class AdminController {
 
     @PostMapping("/add-field-specialist")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void addFieldSpecialist(@RequestBody FieldSpecialist fieldSpecialist) {
         fieldSpecialistService.addFieldSpecialist(fieldSpecialist);
     }
@@ -92,6 +98,7 @@ public class AdminController {
     }
 
     @PatchMapping("/approve-specialist")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void approveSpecialist(@RequestParam String email) {
         specialistService.acceptSpecialist(email);
     }
