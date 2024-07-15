@@ -1,7 +1,10 @@
 package ir.ghazi.service_managment.model;
 
 import ir.ghazi.service_managment.base.entity.BaseEntity;
+import ir.ghazi.service_managment.enums.Role;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +36,7 @@ public class Person extends BaseEntity<Long> {
 
     @Column(name = "register_date")
     private LocalDate registerDate;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
