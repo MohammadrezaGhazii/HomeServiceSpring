@@ -2,22 +2,26 @@ package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
+import ir.ghazi.service_managment.enums.Role;
 import ir.ghazi.service_managment.model.Admin;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.repository.AdminRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AdminService {
+
     private final AdminRepository adminRepository;
 
-    public AdminService(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
-    }
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public Optional<Admin> signInAdmin(String email, String password) {
         try {
@@ -42,6 +46,9 @@ public class AdminService {
     }
 
     public Admin registerAdmin(Admin admin) {
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+        admin.setRegisterDate(LocalDate.now());
+        admin.setRole(Role.ROLE_ADMIN);
         return adminRepository.save(admin);
     }
 }
