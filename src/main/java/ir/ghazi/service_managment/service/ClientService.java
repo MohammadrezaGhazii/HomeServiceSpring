@@ -2,6 +2,7 @@ package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
+import ir.ghazi.service_managment.enums.Role;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.CreditClient;
 import ir.ghazi.service_managment.repository.ClientRepository;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,8 @@ public class ClientService {
         } else if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
             log.warn("This " + client.getEmail() + " is already registered !!!");
         } else {
+            client.setRegisterDate(LocalDate.now());
+            client.setRole(Role.ROLE_CLIENT);
             client.setPassword(passwordEncoder.encode(client.getPassword()));
             clientRepository.save(client);
             CreditClient creditClient = CreditClient.builder()

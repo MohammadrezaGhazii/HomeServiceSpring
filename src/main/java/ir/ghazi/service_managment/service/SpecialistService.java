@@ -2,6 +2,7 @@ package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.base.exception.ValidationException;
+import ir.ghazi.service_managment.enums.Role;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.model.CreditSpecialist;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +55,8 @@ public class SpecialistService {
         } else if (filePath == null) {
             log.warn("This " + specialist.getEmail() + " photo is not available !!!");
         } else {
+            specialist.setRegisterDate(LocalDate.now());
+            specialist.setRole(Role.ROLE_SPECIALIST);
             specialist.setPassword(passwordEncoder.encode(specialist.getPassword()));
             specialistRepository.save(specialist);
             CreditSpecialist creditSpecialist = CreditSpecialist.builder()
