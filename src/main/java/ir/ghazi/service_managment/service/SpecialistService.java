@@ -15,6 +15,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -34,6 +35,8 @@ public class SpecialistService {
 
     private final EntityManager entityManager;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
     public Specialist saveSpecialist(Specialist specialist , String filePath) {
         byte[] bytes = uploadPhoto(filePath);
         specialist.setImage(bytes);
@@ -50,6 +53,7 @@ public class SpecialistService {
         } else if (filePath == null) {
             log.warn("This " + specialist.getEmail() + " photo is not available !!!");
         } else {
+            specialist.setPassword(passwordEncoder.encode(specialist.getPassword()));
             specialistRepository.save(specialist);
             CreditSpecialist creditSpecialist = CreditSpecialist.builder()
                     .specialist(specialist)
