@@ -103,7 +103,6 @@ public class ClientController {
         Rate savedRate = rateService.saveRate(mappedRate);
         return new ResponseEntity<>(RateMapper.INSTANCE.modelToRateSaveResponse(savedRate), HttpStatus.CREATED);
     }
-
     @GetMapping("/filter-client")
     public List<FilterClientResponse> filterClient(@RequestParam String column, String value) {
         List<Client> clients = clientService.filterClient(column, value);
