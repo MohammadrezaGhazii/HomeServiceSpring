@@ -1,7 +1,9 @@
 package ir.ghazi.service_managment.service;
 
 import ir.ghazi.service_managment.base.exception.NotFoundException;
+import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.model.Admin;
+import ir.ghazi.service_managment.model.Client;
 import ir.ghazi.service_managment.repository.AdminRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,16 @@ public class AdminService {
             log.error("An error in Admin sign in ");
             return Optional.empty();
         }
+    }
+
+    public Admin findByEmail(String email) {
+        Optional<Admin> byEmail = adminRepository.findByEmail(email);
+        Admin admin = null;
+        if (byEmail.isPresent())
+            admin = byEmail.get();
+        else
+            throw new ValidationException("Email is not available");
+        return admin;
     }
 
     public Admin registerAdmin(Admin admin) {
