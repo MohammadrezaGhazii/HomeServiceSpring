@@ -13,6 +13,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public class ClientService {
 
     private final EntityManager entityManager;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
 
     public Client saveClient(Client client) {
         if (!Validation.isNameValid(client.getFirstName())) {
@@ -42,6 +45,7 @@ public class ClientService {
         } else if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
             log.warn("This " + client.getEmail() + " is already registered !!!");
         } else {
+            client.setPassword(passwordEncoder.encode(client.getPassword()));
             clientRepository.save(client);
             CreditClient creditClient = CreditClient.builder()
                     .client(client)
