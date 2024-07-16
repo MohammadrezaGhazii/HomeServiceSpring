@@ -39,7 +39,7 @@ public class SpecialistService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public Specialist saveSpecialist(Specialist specialist , String filePath) {
+    public Specialist saveSpecialist(Specialist specialist, String filePath) {
         byte[] bytes = uploadPhoto(filePath);
         specialist.setImage(bytes);
         if (!Validation.isNameValid(specialist.getFirstName())) {
@@ -80,7 +80,7 @@ public class SpecialistService {
         return contentType;
     }
 
-    public byte[] uploadPhoto(String filePath){
+    public byte[] uploadPhoto(String filePath) {
         File file = new File(filePath);
         if (!file.exists() || !file.isFile())
             throw new ValidationException("Invalid file path. Please try again.");
@@ -91,8 +91,7 @@ public class SpecialistService {
             throw new ValidationException("Invalid file format. Please upload a JPG file.");
         try {
             return Files.readAllBytes(file.toPath());
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new ValidationException("Something Wrong");
         }
     }
@@ -135,7 +134,7 @@ public class SpecialistService {
             return true;
     }
 
-    public Specialist findByEmail(String email){
+    public Specialist findByEmail(String email) {
         Optional<Specialist> byEmail = specialistRepository.findByEmail(email);
         Specialist specialist = null;
         if (byEmail.isPresent())
@@ -145,7 +144,11 @@ public class SpecialistService {
         return specialist;
     }
 
-    public List<Specialist> filterSpecialist(String column , String value){
+    public Optional<Specialist> emailOptional(String email) {
+        return specialistRepository.findByEmail(email);
+    }
+
+    public List<Specialist> filterSpecialist(String column, String value) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Specialist> query = criteriaBuilder.createQuery(Specialist.class);
         Root<Specialist> clientRoot = query.from(Specialist.class);

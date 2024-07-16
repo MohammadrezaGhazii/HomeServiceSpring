@@ -13,6 +13,7 @@ import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.model.Specialist;
 import ir.ghazi.service_managment.service.OfferService;
 import ir.ghazi.service_managment.service.SpecialistService;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/specialist")
 public class SpecialistController {
 
     private final SpecialistService specialistService;
@@ -30,6 +32,7 @@ public class SpecialistController {
     private final OfferService offerService;
 
     @PostMapping("/register-specialist")
+    @PermitAll
     public ResponseEntity<SpecialistResponse> registerSpecialist(@RequestBody SpecialistRequest request, String filePath) {
         Specialist mappedSpecialist = SpecialistMapper.INSTANCE.specialistSaveRequestToModel(request);
         Specialist savedSpecialist = specialistService.saveSpecialist(mappedSpecialist, filePath);
@@ -37,7 +40,7 @@ public class SpecialistController {
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("/sign-in-specialist")
+    @GetMapping("/sign-in")
     public void signInSpecialist(@RequestParam String email, String password) {
         specialistService.specialistSignIn(email, password);
     }

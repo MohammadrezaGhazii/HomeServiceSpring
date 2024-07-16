@@ -15,6 +15,7 @@ import ir.ghazi.service_managment.model.FieldSpecialist;
 import ir.ghazi.service_managment.model.Services;
 import ir.ghazi.service_managment.model.SubService;
 import ir.ghazi.service_managment.service.*;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,7 @@ public class AdminController {
     private final SpecialistService specialistService;
 
     @PostMapping("/register")
+    @PermitAll
     public ResponseEntity<AdminResponse> registerAdmin(@RequestBody AdminRequest request) {
         Admin mappedAdmin = AdminMapper.INSTANCE.adminSaveRequestToModel(request);
         Admin savedAdmin = adminService.registerAdmin(mappedAdmin);

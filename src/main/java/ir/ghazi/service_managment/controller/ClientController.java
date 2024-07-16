@@ -20,15 +20,18 @@ import ir.ghazi.service_managment.service.ClientService;
 import ir.ghazi.service_managment.service.OfferService;
 import ir.ghazi.service_managment.service.OrderService;
 import ir.ghazi.service_managment.service.RateService;
+import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/client")
 @RequiredArgsConstructor
 public class ClientController {
 
@@ -40,19 +43,22 @@ public class ClientController {
 
     private final RateService rateService;
 
-    @PostMapping("/register-client")
+    @PostMapping("/register")
+    @PermitAll
     public ResponseEntity<ClientResponse> registerClient(@RequestBody ClientRequest request) {
         Client mappedClient = ClientMapper.INSTANCE.clientSaveRequestToModel(request);
         Client savedClient = clientService.saveClient(mappedClient);
         return new ResponseEntity<>(ClientMapper.INSTANCE.modelToClientSaveResponse(savedClient), HttpStatus.CREATED);
     }
 
-    @GetMapping("/sign-in-client")
+    @GetMapping("/sign-in")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void signInClient(@RequestParam String email, String password) {
         clientService.clientSignIn(email, password);
     }
 
     @PatchMapping("change-password")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void changePassword(@RequestParam String email, String passwordRequest) {
         Client client = clientService.findByEmail(email);
         client.setPassword(passwordRequest);
@@ -60,6 +66,7 @@ public class ClientController {
     }
 
     @PostMapping("/add-order")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<OrderResponse> addOrder(@RequestBody OrderRequest request) {
         Order mappedOrder = OrderMapper.INSTANCE.orderSaveRequestToModel(request);
         Order savedOrder = orderService.addOrder(mappedOrder);

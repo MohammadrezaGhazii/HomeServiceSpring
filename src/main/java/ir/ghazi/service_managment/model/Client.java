@@ -37,7 +37,7 @@ public class Client extends Person implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return getEmail();
     }
 
     @Override

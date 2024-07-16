@@ -89,6 +89,10 @@ public class ClientService {
         return client;
     }
 
+    public Optional<Client> emailOptional(String email){
+        return clientRepository.findByEmail(email);
+    }
+
     public List<Client> filterClient(String column , String value){
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Client> query = criteriaBuilder.createQuery(Client.class);

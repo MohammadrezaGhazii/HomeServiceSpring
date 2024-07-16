@@ -49,7 +49,7 @@ public class Specialist extends Person implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return getEmail();
     }
 
     @Override

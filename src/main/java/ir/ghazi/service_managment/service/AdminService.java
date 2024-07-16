@@ -45,6 +45,10 @@ public class AdminService {
         return admin;
     }
 
+    public Optional<Admin> emailOptional(String email){
+        return adminRepository.findByEmail(email);
+    }
+
     public Admin registerAdmin(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         admin.setRegisterDate(LocalDate.now());
