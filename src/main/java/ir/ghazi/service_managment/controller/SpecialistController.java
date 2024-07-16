@@ -59,17 +59,4 @@ public class SpecialistController {
         Offer savedOffer = offerService.saveOffer(mappedOffer,order,specialist);
         return new ResponseEntity<>(OfferMapper.INSTANCE.modelToOfferSaveResponse(savedOffer), HttpStatus.CREATED);
     }
-
-    @GetMapping("/filter-specialist")
-    public List<FilterSpecialistResponse> filterSpecialist(@RequestParam String column, String value){
-        List<Specialist> specialists = specialistService.filterSpecialist(column, value);
-        List<FilterSpecialistResponse> filterSpecialistResponses = new ArrayList<>();
-
-        for (Specialist specialist : specialists) {
-            FilterSpecialistResponse filterSpecialistResponse =
-                    SpecialistMapper.INSTANCE.modelToFilterSpecialistResponse(specialist);
-            filterSpecialistResponses.add(filterSpecialistResponse);
-        }
-        return filterSpecialistResponses;
-    }
 }

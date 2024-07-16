@@ -2,18 +2,15 @@ package ir.ghazi.service_managment.controller;
 
 import ir.ghazi.service_managment.dto.admin.AdminRequest;
 import ir.ghazi.service_managment.dto.admin.AdminResponse;
+import ir.ghazi.service_managment.dto.client.FilterClientResponse;
 import ir.ghazi.service_managment.dto.service.ServiceRequest;
 import ir.ghazi.service_managment.dto.service.ServiceResponse;
+import ir.ghazi.service_managment.dto.specialist.FilterSpecialistResponse;
 import ir.ghazi.service_managment.dto.subservice.ListSubServiceResponse;
 import ir.ghazi.service_managment.dto.subservice.SubServiceRequest;
 import ir.ghazi.service_managment.dto.subservice.SubServiceResponse;
-import ir.ghazi.service_managment.mapper.AdminMapper;
-import ir.ghazi.service_managment.mapper.ServiceMapper;
-import ir.ghazi.service_managment.mapper.SubServiceMapper;
-import ir.ghazi.service_managment.model.Admin;
-import ir.ghazi.service_managment.model.FieldSpecialist;
-import ir.ghazi.service_managment.model.Services;
-import ir.ghazi.service_managment.model.SubService;
+import ir.ghazi.service_managment.mapper.*;
+import ir.ghazi.service_managment.model.*;
 import ir.ghazi.service_managment.service.*;
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +36,8 @@ public class AdminController {
     private final FieldSpecialistService fieldSpecialistService;
 
     private final SpecialistService specialistService;
+
+    private final ClientService clientService;
 
     @PostMapping("/register")
     @PermitAll
@@ -78,6 +77,7 @@ public class AdminController {
     }
 
     @GetMapping("/list-services")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<ServiceResponse> listService() {
         List<Services> services = serviceService.listServices();
         List<ServiceResponse> serviceResponseList = new ArrayList<>();
@@ -89,6 +89,7 @@ public class AdminController {
     }
 
     @GetMapping("/list-sub-services")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<ListSubServiceResponse> listSubService() {
         List<SubService> subServices = subServiceService.subServiceList();
         List<ListSubServiceResponse> subServiceResponseList = new ArrayList<>();
@@ -103,5 +104,32 @@ public class AdminController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void approveSpecialist(@RequestParam String email) {
         specialistService.acceptSpecialist(email);
+    }
+
+    @GetMapping("/filter-client")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<FilterClientResponse> filterClient(@RequestParam String column, String value) {
+        List<Client> clients = clientService.filterClient(column, value);
+        List<FilterClientResponse> filterClientResponses = new ArrayList<>();
+
+        for (Client client : clients) {
+            FilterClientResponse filterClientResponse = ClientMapper.INSTANCE.modelToFilterClientResponse(client);
+            filterClientResponses.add(filterClientResponse);
+        }
+        return filterClientResponses;
+    }
+
+    @GetMapping("/filter-specialist")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<FilterSpecialistResponse> filterSpecialist(@RequestParam String column, String value){
+        List<Specialist> specialists = specialistService.filterSpecialist(column, value);
+        List<FilterSpecialistResponse> filterSpecialistResponses = new ArrayList<>();
+
+        for (Specialist specialist : specialists) {
+            FilterSpecialistResponse filterSpecialistResponse =
+                    SpecialistMapper.INSTANCE.modelToFilterSpecialistResponse(specialist);
+            filterSpecialistResponses.add(filterSpecialistResponse);
+        }
+        return filterSpecialistResponses;
     }
 }

@@ -74,51 +74,47 @@ public class ClientController {
     }
 
     @GetMapping("/list-by-price")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void listByPrice(@RequestParam Long id) {
         offerService.listByOfferPrice(id);
     }
 
     @GetMapping("/list-by-score")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void listByScore(@RequestParam Long id) {
         offerService.listByScoreSpecialist(id);
     }
 
     @PatchMapping("/choose-specialist")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void chooseSpecialist(Long id) {
         Offer offer = offerService.findById(id);
         offerService.chooseOfferFromClient(offer);
     }
 
     @PatchMapping("/change-to-started")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void changeStarted(Long id) {
         orderService.addStartWorkFromClient(id);
     }
 
     @PatchMapping("/change-to-done")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void changeDone(Long id) {
         orderService.changeSituationOrderToEnd(id);
     }
 
     @PatchMapping("/pay-by-wallet")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void payWallet(Long id) {
         orderService.paymentWallet(id);
     }
 
     @PostMapping("/add-rate")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<RateResponse> addRate(@RequestBody RateRequest request) {
         Rate mappedRate = RateMapper.INSTANCE.rateSaveRequestToModel(request);
         Rate savedRate = rateService.saveRate(mappedRate);
         return new ResponseEntity<>(RateMapper.INSTANCE.modelToRateSaveResponse(savedRate), HttpStatus.CREATED);
-    }
-    @GetMapping("/filter-client")
-    public List<FilterClientResponse> filterClient(@RequestParam String column, String value) {
-        List<Client> clients = clientService.filterClient(column, value);
-        List<FilterClientResponse> filterClientResponses = new ArrayList<>();
-
-        for (Client client : clients) {
-            FilterClientResponse filterClientResponse = ClientMapper.INSTANCE.modelToFilterClientResponse(client);
-            filterClientResponses.add(filterClientResponse);
-        }
-        return filterClientResponses;
     }
 }
