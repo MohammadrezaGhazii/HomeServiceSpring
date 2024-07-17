@@ -4,11 +4,15 @@ import ir.ghazi.service_managment.base.exception.ValidationException;
 import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.enums.SpecialistSituation;
 import ir.ghazi.service_managment.model.*;
+import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.repository.FieldSpecialistRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,6 +37,8 @@ public class OrderService {
     private final SpecialistService specialistService;
 
     private final SpecialistRepository specialistRepository;
+
+    private final EntityManager entityManager;
 
     public Order addOrder(Order order) {
         return orderRepository.save(order);
@@ -131,5 +137,20 @@ public class OrderService {
             orderRepository.save(order);
         } else
             throw new ValidationException("Not enough money in wallet or this order is payed before");
+    }
+
+    public List<Order> filterClientByOrderSituation(String column, Long value,
+                                                     String column1, String value1) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Order> query = criteriaBuilder.createQuery(Order.class);
+        Root<Order> offerRoot = query.from(Order.class);
+
+        Join<Order, Client> specialistJoin = offerRoot.join(column);
+
+        Predicate columnFilter = criteriaBuilder.equal(specialistJoin.get("id"), value);
+        Predicate columnFilter1 = criteriaBuilder.equal(offerRoot.get(column1), value1);
+        query.where(criteriaBuilder.and(columnFilter, columnFilter1));
+
+        return entityManager.createQuery(query).getResultList();
     }
 }

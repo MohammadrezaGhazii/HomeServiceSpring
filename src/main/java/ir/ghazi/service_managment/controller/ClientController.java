@@ -3,6 +3,8 @@ package ir.ghazi.service_managment.controller;
 import ir.ghazi.service_managment.dto.client.ClientRequest;
 import ir.ghazi.service_managment.dto.client.ClientResponse;
 import ir.ghazi.service_managment.dto.client.FilterClientResponse;
+import ir.ghazi.service_managment.dto.offer.OfferFilterResponse;
+import ir.ghazi.service_managment.dto.order.OrderFilterResponse;
 import ir.ghazi.service_managment.dto.order.OrderRequest;
 import ir.ghazi.service_managment.dto.order.OrderResponse;
 import ir.ghazi.service_managment.dto.payment.PaymentRequest;
@@ -10,6 +12,7 @@ import ir.ghazi.service_managment.dto.rate.RateRequest;
 import ir.ghazi.service_managment.dto.rate.RateResponse;
 import ir.ghazi.service_managment.dto.subservice.ListSubServiceResponse;
 import ir.ghazi.service_managment.mapper.ClientMapper;
+import ir.ghazi.service_managment.mapper.OfferMapper;
 import ir.ghazi.service_managment.mapper.OrderMapper;
 import ir.ghazi.service_managment.mapper.RateMapper;
 import ir.ghazi.service_managment.model.Client;
@@ -116,5 +119,21 @@ public class ClientController {
         Rate mappedRate = RateMapper.INSTANCE.rateSaveRequestToModel(request);
         Rate savedRate = rateService.saveRate(mappedRate);
         return new ResponseEntity<>(RateMapper.INSTANCE.modelToRateSaveResponse(savedRate), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/filter-orders")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public List<OrderFilterResponse> filterOrder(@RequestParam String column, Long value,
+                                                 String column1, String value1) {
+        List<Order> orders =
+                orderService.filterClientByOrderSituation(column, value, column1, value1);
+        List<OrderFilterResponse> orderFilterResponses = new ArrayList<>();
+
+        for (Order order : orders) {
+            OrderFilterResponse orderFilterResponse =
+                    OrderMapper.INSTANCE.modelToOrderFilterResponse(order);
+            orderFilterResponses.add(orderFilterResponse);
+        }
+        return orderFilterResponses;
     }
 }
