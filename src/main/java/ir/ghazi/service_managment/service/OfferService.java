@@ -4,9 +4,12 @@ import ir.ghazi.service_managment.base.exception.NotFoundException;
 import ir.ghazi.service_managment.enums.OfferSituation;
 import ir.ghazi.service_managment.enums.OrderSituation;
 import ir.ghazi.service_managment.model.*;
+import ir.ghazi.service_managment.model.Order;
 import ir.ghazi.service_managment.repository.OfferRepository;
 import ir.ghazi.service_managment.repository.OrderRepository;
 import ir.ghazi.service_managment.repository.SpecialistRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class OfferService {
     private final FieldSpecialistService fieldSpecialistService;
     private final OrderRepository orderRepository;
     private final SpecialistRepository specialistRepository;
+    private final EntityManager entityManager;
 
     public Offer saveOffer(Offer offer, Long order, Long specialist) {
         Optional<Order> byIdOrder = orderRepository.findById(order);
@@ -128,5 +132,20 @@ public class OfferService {
             throw new NotFoundException("This order with Situation ACCEPTED is not found");
 
         return offer;
+    }
+
+    public List<Offer> filterSpecialistByOfferSituation(String column, Long value,
+                                                        String column1, String value1) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Offer> query = criteriaBuilder.createQuery(Offer.class);
+        Root<Offer> offerRoot = query.from(Offer.class);
+
+        Join<Offer, Specialist> specialistJoin = offerRoot.join(column);
+
+        Predicate columnFilter = criteriaBuilder.equal(specialistJoin.get("id"), value);
+        Predicate columnFilter1 = criteriaBuilder.equal(offerRoot.get(column1), value1);
+        query.where(criteriaBuilder.and(columnFilter, columnFilter1));
+
+        return entityManager.createQuery(query).getResultList();
     }
 }
