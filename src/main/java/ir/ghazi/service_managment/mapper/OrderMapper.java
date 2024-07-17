@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.mapper;
 
+import ir.ghazi.service_managment.dto.order.AllOrdersResponse;
 import ir.ghazi.service_managment.dto.order.OrderFilterResponse;
 import ir.ghazi.service_managment.dto.order.OrderRequest;
 import ir.ghazi.service_managment.dto.order.OrderResponse;
@@ -16,4 +17,6 @@ public interface OrderMapper {
     OrderResponse modelToOrderSaveResponse(Order order);
 
     OrderFilterResponse modelToOrderFilterResponse(Order order);
+
+    AllOrdersResponse modelToAllOrdersResponse(Order order);
 }

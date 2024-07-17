@@ -40,6 +40,8 @@ public class OrderService {
 
     private final EntityManager entityManager;
 
+    private final ClientService clientService;
+
     public Order addOrder(Order order) {
         return orderRepository.save(order);
     }
@@ -152,5 +154,10 @@ public class OrderService {
         query.where(criteriaBuilder.and(columnFilter, columnFilter1));
 
         return entityManager.createQuery(query).getResultList();
+    }
+
+    public List<Order> allOrderByClient(String email){
+        Client client = clientService.findByEmail(email);
+        return orderRepository.findByClient(client);
     }
 }
