@@ -3,6 +3,7 @@ package ir.ghazi.service_managment.controller;
 import ir.ghazi.service_managment.dto.admin.AdminRequest;
 import ir.ghazi.service_managment.dto.admin.AdminResponse;
 import ir.ghazi.service_managment.dto.client.FilterClientResponse;
+import ir.ghazi.service_managment.dto.offer.AllOfferResponse;
 import ir.ghazi.service_managment.dto.order.AllOrdersResponse;
 import ir.ghazi.service_managment.dto.service.ServiceRequest;
 import ir.ghazi.service_managment.dto.service.ServiceResponse;
@@ -41,6 +42,8 @@ public class AdminController {
     private final ClientService clientService;
 
     private final OrderService orderService;
+
+    private final OfferService offerService;
 
     @PostMapping("/register")
     @PermitAll
@@ -147,5 +150,18 @@ public class AdminController {
             allOrdersResponses.add(allOrdersResponse);
         }
         return allOrdersResponses;
+    }
+
+    @GetMapping("/history-offer-specialist")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<AllOfferResponse> historyOffers(String email){
+        List<Offer> offers = offerService.allOffersBySpecialist(email);
+        List<AllOfferResponse> allOfferResponses = new ArrayList<>();
+        for (Offer offer : offers) {
+            AllOfferResponse allOfferResponse =
+                    OfferMapper.INSTANCE.modelToAllOfferResponse(offer);
+            allOfferResponses.add(allOfferResponse);
+        }
+        return allOfferResponses;
     }
 }

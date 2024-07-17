@@ -1,5 +1,6 @@
 package ir.ghazi.service_managment.mapper;
 
+import ir.ghazi.service_managment.dto.offer.AllOfferResponse;
 import ir.ghazi.service_managment.dto.offer.OfferFilterResponse;
 import ir.ghazi.service_managment.dto.offer.OfferRequest;
 import ir.ghazi.service_managment.dto.offer.OfferResponse;
@@ -16,4 +17,6 @@ public interface OfferMapper {
     OfferResponse modelToOfferSaveResponse(Offer offer);
 
     OfferFilterResponse modelToOfferFilterResponse(Offer offer);
+
+    AllOfferResponse modelToAllOfferResponse(Offer offer);
 }

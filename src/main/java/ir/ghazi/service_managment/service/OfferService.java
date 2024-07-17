@@ -148,4 +148,14 @@ public class OfferService {
 
         return entityManager.createQuery(query).getResultList();
     }
+
+    public List<Offer> allOffersBySpecialist(String email){
+        Optional<Specialist> specialist = specialistRepository.findByEmail(email);
+        List<Offer> bySpecialist = null;
+        if (specialist.isPresent()){
+            Specialist specialist1 = specialist.get();
+            bySpecialist = offerRepository.findBySpecialist(specialist1);
+        }
+        return bySpecialist;
+    }
 }
