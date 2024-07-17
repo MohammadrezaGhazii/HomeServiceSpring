@@ -10,9 +10,8 @@ import ir.ghazi.service_managment.dto.specialist.SpecialistResponse;
 import ir.ghazi.service_managment.enums.OfferSituation;
 import ir.ghazi.service_managment.mapper.OfferMapper;
 import ir.ghazi.service_managment.mapper.SpecialistMapper;
-import ir.ghazi.service_managment.model.Offer;
-import ir.ghazi.service_managment.model.Order;
-import ir.ghazi.service_managment.model.Specialist;
+import ir.ghazi.service_managment.model.*;
+import ir.ghazi.service_managment.service.CreditSpecialistService;
 import ir.ghazi.service_managment.service.OfferService;
 import ir.ghazi.service_managment.service.SpecialistService;
 import jakarta.annotation.security.PermitAll;
@@ -33,6 +32,8 @@ public class SpecialistController {
     private final SpecialistService specialistService;
 
     private final OfferService offerService;
+
+    private final CreditSpecialistService creditSpecialistService;
 
     @PostMapping("/register-specialist")
     @PermitAll
@@ -80,5 +81,12 @@ public class SpecialistController {
             offerResponseList.add(offerFilterResponse);
         }
         return offerResponseList;
+    }
+    @GetMapping("/inventory")
+    @PreAuthorize("hasRole('ROLE_SPECIALIST')")
+    public double inventory(String email){
+        Specialist specialist = specialistService.findByEmail(email);
+        CreditSpecialist bySpecialist = creditSpecialistService.findBySpecialist(specialist);
+        return bySpecialist.getInventory();
     }
 }
