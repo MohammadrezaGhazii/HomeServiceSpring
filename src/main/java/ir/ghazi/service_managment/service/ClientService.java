@@ -103,4 +103,14 @@ public class ClientService {
 
         return entityManager.createQuery(query).getResultList();
     }
+
+    public LocalDate registerDate(String email){
+        Optional<Client> client = clientRepository.findByEmail(email);
+        LocalDate registerDate = null;
+        if (client.isPresent()){
+            Client client1 = client.get();
+            registerDate = client1.getRegisterDate();
+        }
+        return registerDate;
+    }
 }

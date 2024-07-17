@@ -158,4 +158,14 @@ public class SpecialistService {
 
         return entityManager.createQuery(query).getResultList();
     }
+
+    public LocalDate dateRegister(String email) {
+        Optional<Specialist> specialist = specialistRepository.findByEmail(email);
+        LocalDate registerDate = null;
+        if (specialist.isPresent()) {
+            Specialist specialist1 = specialist.get();
+            registerDate = specialist1.getRegisterDate();
+        }
+        return registerDate;
+    }
 }
