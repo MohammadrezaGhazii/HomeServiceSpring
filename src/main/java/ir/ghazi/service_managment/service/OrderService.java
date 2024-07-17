@@ -160,4 +160,10 @@ public class OrderService {
         Client client = clientService.findByEmail(email);
         return orderRepository.findByClient(client);
     }
+
+    public int numberOfOrderByClient(String email){
+        Client client = clientService.findByEmail(email);
+        List<Order> byClient = orderRepository.findByClient(client);
+        return byClient.size();
+    }
 }

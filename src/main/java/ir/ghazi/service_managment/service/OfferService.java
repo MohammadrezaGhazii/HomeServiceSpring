@@ -158,4 +158,14 @@ public class OfferService {
         }
         return bySpecialist;
     }
+
+    public int numberOfOfferBySpecialist(String email){
+        Optional<Specialist> byEmail = specialistRepository.findByEmail(email);
+        List<Offer> bySpecialist = null;
+        if (byEmail.isPresent()){
+            Specialist specialist = byEmail.get();
+            bySpecialist = offerRepository.findBySpecialist(specialist);
+        }
+        return bySpecialist.size();
+    }
 }

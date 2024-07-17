@@ -177,4 +177,16 @@ public class AdminController {
     public LocalDate registerClient(String email){
         return clientService.registerDate(email);
     }
+
+    @GetMapping("/number-order-client")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public int numberOfOrderByClient(String email){
+        return orderService.numberOfOrderByClient(email);
+    }
+
+    @GetMapping("/number-offer-specialist")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public int numberOfOfferBySpecialist(String email){
+        return offerService.numberOfOfferBySpecialist(email);
+    }
 }
