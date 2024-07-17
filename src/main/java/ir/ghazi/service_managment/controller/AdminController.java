@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,5 +164,17 @@ public class AdminController {
             allOfferResponses.add(allOfferResponse);
         }
         return allOfferResponses;
+    }
+
+    @GetMapping("/register-date-specialist")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public LocalDate registerSpecialist(String email){
+        return specialistService.dateRegister(email);
+    }
+
+    @GetMapping("/register-date-client")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public LocalDate registerClient(String email){
+        return clientService.registerDate(email);
     }
 }
