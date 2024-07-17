@@ -15,14 +15,8 @@ import ir.ghazi.service_managment.mapper.ClientMapper;
 import ir.ghazi.service_managment.mapper.OfferMapper;
 import ir.ghazi.service_managment.mapper.OrderMapper;
 import ir.ghazi.service_managment.mapper.RateMapper;
-import ir.ghazi.service_managment.model.Client;
-import ir.ghazi.service_managment.model.Offer;
-import ir.ghazi.service_managment.model.Order;
-import ir.ghazi.service_managment.model.Rate;
-import ir.ghazi.service_managment.service.ClientService;
-import ir.ghazi.service_managment.service.OfferService;
-import ir.ghazi.service_managment.service.OrderService;
-import ir.ghazi.service_managment.service.RateService;
+import ir.ghazi.service_managment.model.*;
+import ir.ghazi.service_managment.service.*;
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,6 +39,8 @@ public class ClientController {
     private final OfferService offerService;
 
     private final RateService rateService;
+
+    private final CreditClientService creditClientService;
 
     @PostMapping("/register")
     @PermitAll
@@ -135,5 +131,13 @@ public class ClientController {
             orderFilterResponses.add(orderFilterResponse);
         }
         return orderFilterResponses;
+    }
+
+    @GetMapping("/inventory")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public double inventory(String email){
+        Client client = clientService.findByEmail(email);
+        CreditClient byClient = creditClientService.findByClient(client);
+        return byClient.getInventory();
     }
 }
